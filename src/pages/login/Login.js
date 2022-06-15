@@ -210,12 +210,16 @@ function Login(props) {
             centered
           >
             <Tab label="Login" classes={{ root: classes.tab }} />
-            <Tab label="New User" classes={{ root: classes.tab }} />
+            <Tab label="House Owner" classes={{ root: classes.tab }} />
+            <Tab label="Renter" classes={{ root: classes.tab }} />
           </Tabs>
           {activeTabId === 0 && (
             <React.Fragment>
               <Typography variant="h3" className={classes.greeting}>
-                <a href="https://juniv.edu/" target="_blank" style={{color: "green"}}>Jahangirnagar University</a> House Renting System
+                <a href="https://juniv.edu/" target="_blank" style={{color: "green"}}>Jahangirnagar University</a>
+              </Typography>
+              <Typography variant="h3" className={classes.greeting1}>
+                House Renting System
               </Typography>
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
@@ -407,7 +411,167 @@ function Login(props) {
                               formik.isSubmitting,
                               formik.values.first_name.length === 0 || formik.values.last_name.length === 0 || formik.values.username.length === 0 || formik.values.password.length === 0 || formik.values.password2.length === 0
                             }
-                            text="Create your account"
+                            text="Sign Up"
+                        />
+                      )}
+                        <Controls.Button
+                            text="Reset"
+                            color="default"
+                            onClick = {formik.resetForm}
+                        />
+                    </div> 
+                </Grid>
+                </Grid>
+              </Form>
+            </React.Fragment>
+          )}
+          {activeTabId === 2 && (
+            <React.Fragment>
+              <Typography variant="h2" className={classes.subGreeting}>
+                Create your account
+              </Typography>
+              <Fade in={message}>
+                <GreenTextTypography variant="subtitle1">
+                  {message}
+                </GreenTextTypography>
+              </Fade>
+              <Form onSubmit={formik.handleSubmit}>
+                <Grid container justify="space-between" alignItems="flex-start" spacing={0}>
+                  <Grid item md={12} sm={12} xs={12}>
+                    <TextField
+                      label="First Name"
+                      name="first_name"
+                      id="name"
+                      InputProps={{
+                        classes: {
+                          underline: classes.textFieldUnderline,
+                          input: classes.textField,
+                        },
+                      }}
+                      value={formik.values.first_name}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      margin="normal"
+                      type="text"
+                      error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                      helperText={formik.touched.first_name && formik.errors.first_name}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item md={12} sm={12} xs={12}>
+                    <TextField 
+                      label="Last Name"
+                      name="last_name"
+                      InputProps={{
+                        classes: {
+                          underline: classes.textFieldUnderline,
+                          input: classes.textField,
+                        },
+                      }}
+                      value={formik.values.last_name}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      margin="normal"
+                      type="text"
+                      error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+                      helperText={formik.touched.last_name && formik.errors.last_name}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item md={12} sm={12} xs={12}>
+                    <TextField 
+                      label="Phone"
+                      name="phone"
+                      InputProps={{
+                        classes: {
+                          underline: classes.textFieldUnderline,
+                          input: classes.textField,
+                        },
+                      }}
+                      value={formik.values.username}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      margin="normal"
+                      type="number"
+                      error={formik.touched.username && Boolean(formik.errors.username)}
+                      helperText={formik.touched.username && formik.errors.username}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item md={12} sm={12} xs={12}>
+                    <TextField 
+                      label="Email"
+                      name="username"
+                      InputProps={{
+                        classes: {
+                          underline: classes.textFieldUnderline,
+                          input: classes.textField,
+                        },
+                      }}
+                      value={formik.values.username}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      margin="normal"
+                      type="email"
+                      error={formik.touched.username && Boolean(formik.errors.username)}
+                      helperText={formik.touched.username && formik.errors.username}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item md={12} sm={12} xs={12}>
+                    <TextField 
+                      label="Password"
+                      name="password"
+                      InputProps={{
+                        classes: {
+                          underline: classes.textFieldUnderline,
+                          input: classes.textField,
+                        },
+                      }}
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      margin="normal"
+                      type="password"
+                      error={formik.touched.password && Boolean(formik.errors.password)}
+                      helperText={formik.touched.password && formik.errors.password}
+                      fullWidth  
+                   />
+                  </Grid>
+                
+                <Grid item md={12} sm={12} xs={12}>
+                  <TextField 
+                    label="Confirm Password"
+                    name="password2"
+                    InputProps={{
+                      classes: {
+                        underline: classes.textFieldUnderline,
+                        input: classes.textField,
+                      },
+                    }}
+                    value={formik.values.password2}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    margin="normal"
+                    type="password"
+                    error={formik.touched.password2 && Boolean(formik.errors.password2)}
+                    helperText={formik.touched.password2 && formik.errors.password2}
+                    fullWidth
+                  />
+                </Grid>
+                
+                <Grid item style={{ marginTop: 3 }} md={12} sm={12} xs={12}>
+                    <div className={classes.wrapper}>
+                    {isLoading ? (
+                        <CircularProgress size={26} className={classes.loginLoader} />
+                      ) : (
+                        <Controls.Button
+                            type="submit"
+                            disabled={
+                              formik.isSubmitting,
+                              formik.values.first_name.length === 0 || formik.values.last_name.length === 0 || formik.values.username.length === 0 || formik.values.password.length === 0 || formik.values.password2.length === 0
+                            }
+                            text="Sign Up"
                         />
                       )}
                         <Controls.Button
@@ -424,6 +588,9 @@ function Login(props) {
         </div>
         <Typography color="primary" className={classes.copyright}>
         © {new Date().getFullYear()} <a style={{ textDecoration: 'none', color: 'inherit' }} href="https://www.linkedin.com/in/md-abdul-alim-milon/" rel="noopener noreferrer" target="_blank">Design & Develop by <span style={{color: "purple"}}>Md. Abdul Alim</span></a>
+        </Typography>
+        <Typography color="black" className={classes.pmscs}>
+          Batch: <span style={{color: "green"}}>PMSCS 26</span>
         </Typography>
       </div>
     </Grid>

@@ -54,7 +54,10 @@ export default makeStyles(theme => ({
     },
   },
   form: {
-    width: 320,
+    width: 460,
+    [theme.breakpoints.down("md")]: {
+      width: 340,
+    },
   },
   tab: {
     fontWeight: 400,
@@ -64,6 +67,11 @@ export default makeStyles(theme => ({
     fontWeight: 500,
     textAlign: "center",
     marginTop: theme.spacing(4),
+  },
+  greeting1: {
+    fontWeight: 500,
+    textAlign: "center",
+    marginTop: theme.spacing(1),
   },
   subGreeting: {
     fontWeight: 500,
@@ -142,11 +150,21 @@ export default makeStyles(theme => ({
     marginLeft: theme.spacing(4),
   },
   copyright: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(1),
     whiteSpace: "nowrap",
     [theme.breakpoints.up("md")]: {
       position: "absolute",
       bottom: theme.spacing(2),
+    },
+  },
+  pmscs: {
+    marginTop: theme.spacing(1),
+    whiteSpace: "nowrap",
+    display: "flex",
+    [theme.breakpoints.up("md")]: {
+      position: "absolute",
+      bottom: theme.spacing(2),
+      display: "none",
     },
   },
 }));
