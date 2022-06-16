@@ -77,23 +77,4 @@ export default function App() {
       />
     );
   }
-
-  function SignUpRoute({ component, ...rest }) {
-    return (
-      <Route
-        {...rest}
-        render={props =>
-          isAuthenticated ? (
-            <Redirect
-              to={{
-                pathname: "/signup",
-              }}
-            />
-          ) : (
-            React.createElement(component, props)
-          )
-        }
-      />
-    );
-  }
 }

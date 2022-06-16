@@ -8,6 +8,10 @@ import {
   Tab,
   TextField,
   Fade,
+  FormControl,
+  InputLabel,
+  Select as MuiSelect,
+  MenuItem
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import classnames from "classnames";
@@ -32,11 +36,23 @@ const GreenTextTypography = withStyles({
     color: "#00FF00"
   }
 })(Typography);
-var initialValues = {
+
+var initialHouseOwnerValues = {
   id: 0,
   first_name: "",
   last_name: "",
-  username: "",
+  email: "",
+  password: "",
+  password2: ""
+};
+
+var initialRenterValues = {
+  id: 0,
+  first_name: "",
+  last_name: "",
+  email: "",
+  phone: "",
+  role: "",
   password: "",
   password2: ""
 };
@@ -54,7 +70,7 @@ const duplicateUserNameCheck = (list, value)=> {
     return check
   }else{
     for (let i=0; i< list.length; i ++){
-        if(value === list[i].username){       
+        if(value === list[i].email){       
           return check = false
         }
       }
@@ -76,15 +92,18 @@ function Login(props) {
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
   const [ userList, setUserList] = useState(null);
+  const [ groupList, setGroupList] = useState(null);
   const [message, setMessage] = useState(null)
+
 
   const validationSchema = yup.object().shape({
     first_name: yup.string().required("First Name is required"),
     last_name: yup.string().required("First Name is required"),
-    // username: yup.string().required("Email is required")
-    // .test("Unique", "Email already exist.Try other.", (values) => {
-    //   return duplicateUserNameCheck(userList, values)
-    // }),
+    phone: yup.number().required("Phone number is required."),
+    email: yup.string().required("Email is required")
+    .test("Unique", "Email already exist.Try other.", (values) => {
+      return duplicateUserNameCheck(userList, values)
+    }),
     password: yup.string().required("Password is required").test((values)=>{
       holdPassword = values
       return true
@@ -99,14 +118,24 @@ function Login(props) {
     }),
   });
 
-  const formik = useFormik({
-    initialValues: initialValues,
+  const HouseOwnerFormik = useFormik({
+    initialValues: initialHouseOwnerValues,
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       setSubmitting(true);
       addOrEdit(values, resetForm, setSubmitting);
     },
   });
+
+  const RenterFormik = useFormik({
+    initialValues: initialRenterValues,
+    validationSchema: validationSchema,
+    onSubmit: (values, { setSubmitting, resetForm }) => {
+      setSubmitting(true);
+      addOrEdit(values, resetForm, setSubmitting);
+    },
+  });
+
 
   const LoginFormik = useFormik({
     initialValues: loginValues,
@@ -123,6 +152,12 @@ function Login(props) {
       setUserList(body);
     }
     getUsers();
+    async function getGroups() {
+      const response = await fetch("/api/group/list");
+      const body = await response.json();
+      setGroupList(body);
+    }
+    getGroups();
   }, []);
 
   const login = async (values) => {
@@ -210,8 +245,8 @@ function Login(props) {
             centered
           >
             <Tab label="Login" classes={{ root: classes.tab }} />
-            <Tab label="House Owner" classes={{ root: classes.tab }} />
-            <Tab label="Renter" classes={{ root: classes.tab }} />
+            {/* <Tab label="House Owner" classes={{ root: classes.tab }} /> */}
+            <Tab label="New User" classes={{ root: classes.tab }} />
           </Tabs>
           {activeTabId === 0 && (
             <React.Fragment>
@@ -285,7 +320,7 @@ function Login(props) {
               </Form>
             </React.Fragment>
           )}
-          {activeTabId === 1 && (
+          {/* {activeTabId === 1 && (
             <React.Fragment>
               <Typography variant="h2" className={classes.subGreeting}>
                 Create your account
@@ -295,7 +330,7 @@ function Login(props) {
                   {message}
                 </GreenTextTypography>
               </Fade>
-              <Form onSubmit={formik.handleSubmit}>
+              <Form onSubmit={HouseOwnerFormik.handleSubmit}>
                 <Grid container justify="space-between" alignItems="flex-start" spacing={0}>
                   <Grid item md={12} sm={12} xs={12}>
                     <TextField
@@ -308,13 +343,13 @@ function Login(props) {
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.first_name}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={HouseOwnerFormik.values.first_name}
+                      onChange={HouseOwnerFormik.handleChange}
+                      onBlur={HouseOwnerFormik.handleBlur}
                       margin="normal"
                       type="text"
-                      error={formik.touched.first_name && Boolean(formik.errors.first_name)}
-                      helperText={formik.touched.first_name && formik.errors.first_name}
+                      error={HouseOwnerFormik.touched.first_name && Boolean(HouseOwnerFormik.errors.first_name)}
+                      helperText={HouseOwnerFormik.touched.first_name && HouseOwnerFormik.errors.first_name}
                       fullWidth
                     />
                   </Grid>
@@ -328,33 +363,33 @@ function Login(props) {
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.last_name}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={HouseOwnerFormik.values.last_name}
+                      onChange={HouseOwnerFormik.handleChange}
+                      onBlur={HouseOwnerFormik.handleBlur}
                       margin="normal"
                       type="text"
-                      error={formik.touched.last_name && Boolean(formik.errors.last_name)}
-                      helperText={formik.touched.last_name && formik.errors.last_name}
+                      error={HouseOwnerFormik.touched.last_name && Boolean(HouseOwnerFormik.errors.last_name)}
+                      helperText={HouseOwnerFormik.touched.last_name && HouseOwnerFormik.errors.last_name}
                       fullWidth
                     />
                   </Grid>
                   <Grid item md={12} sm={12} xs={12}>
                     <TextField 
                       label="Email"
-                      name="username"
+                      name="email"
                       InputProps={{
                         classes: {
                           underline: classes.textFieldUnderline,
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.username}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={HouseOwnerFormik.values.email}
+                      onChange={HouseOwnerFormik.handleChange}
+                      onBlur={HouseOwnerFormik.handleBlur}
                       margin="normal"
                       type="email"
-                      error={formik.touched.username && Boolean(formik.errors.username)}
-                      helperText={formik.touched.username && formik.errors.username}
+                      error={HouseOwnerFormik.touched.email && Boolean(HouseOwnerFormik.errors.email)}
+                      helperText={HouseOwnerFormik.touched.email && HouseOwnerFormik.errors.email}
                       fullWidth
                     />
                   </Grid>
@@ -368,13 +403,13 @@ function Login(props) {
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.password}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={HouseOwnerFormik.values.password}
+                      onChange={HouseOwnerFormik.handleChange}
+                      onBlur={HouseOwnerFormik.handleBlur}
                       margin="normal"
                       type="password"
-                      error={formik.touched.password && Boolean(formik.errors.password)}
-                      helperText={formik.touched.password && formik.errors.password}
+                      error={HouseOwnerFormik.touched.password && Boolean(HouseOwnerFormik.errors.password)}
+                      helperText={HouseOwnerFormik.touched.password && HouseOwnerFormik.errors.password}
                       fullWidth  
                    />
                   </Grid>
@@ -389,13 +424,13 @@ function Login(props) {
                         input: classes.textField,
                       },
                     }}
-                    value={formik.values.password2}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
+                    value={HouseOwnerFormik.values.password2}
+                    onChange={HouseOwnerFormik.handleChange}
+                    onBlur={HouseOwnerFormik.handleBlur}
                     margin="normal"
                     type="password"
-                    error={formik.touched.password2 && Boolean(formik.errors.password2)}
-                    helperText={formik.touched.password2 && formik.errors.password2}
+                    error={HouseOwnerFormik.touched.password2 && Boolean(HouseOwnerFormik.errors.password2)}
+                    helperText={HouseOwnerFormik.touched.password2 && HouseOwnerFormik.errors.password2}
                     fullWidth
                   />
                 </Grid>
@@ -407,25 +442,25 @@ function Login(props) {
                       ) : (
                         <Controls.Button
                             type="submit"
-                            disabled={
-                              formik.isSubmitting,
-                              formik.values.first_name.length === 0 || formik.values.last_name.length === 0 || formik.values.username.length === 0 || formik.values.password.length === 0 || formik.values.password2.length === 0
-                            }
+                            // disabled={
+                            //   HouseOwnerFormik.isSubmitting,
+                            //   HouseOwnerFormik.values.first_name.length === 0 || HouseOwnerFormik.values.last_name.length === 0 || HouseOwnerFormik.values.username.length === 0 || HouseOwnerFormik.values.password.length === 0 || HouseOwnerFormik.values.password2.length === 0
+                            // }
                             text="Sign Up"
                         />
                       )}
                         <Controls.Button
                             text="Reset"
                             color="default"
-                            onClick = {formik.resetForm}
+                            onClick = {HouseOwnerFormik.resetForm}
                         />
                     </div> 
                 </Grid>
                 </Grid>
               </Form>
             </React.Fragment>
-          )}
-          {activeTabId === 2 && (
+          )} */}
+          {activeTabId === 1 && (
             <React.Fragment>
               <Typography variant="h2" className={classes.subGreeting}>
                 Create your account
@@ -435,7 +470,7 @@ function Login(props) {
                   {message}
                 </GreenTextTypography>
               </Fade>
-              <Form onSubmit={formik.handleSubmit}>
+              <Form onSubmit={RenterFormik.handleSubmit}>
                 <Grid container justify="space-between" alignItems="flex-start" spacing={0}>
                   <Grid item md={12} sm={12} xs={12}>
                     <TextField
@@ -448,13 +483,13 @@ function Login(props) {
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.first_name}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={RenterFormik.values.first_name}
+                      onChange={RenterFormik.handleChange}
+                      onBlur={RenterFormik.handleBlur}
                       margin="normal"
                       type="text"
-                      error={formik.touched.first_name && Boolean(formik.errors.first_name)}
-                      helperText={formik.touched.first_name && formik.errors.first_name}
+                      error={RenterFormik.touched.first_name && Boolean(RenterFormik.errors.first_name)}
+                      helperText={RenterFormik.touched.first_name && RenterFormik.errors.first_name}
                       fullWidth
                     />
                   </Grid>
@@ -468,13 +503,13 @@ function Login(props) {
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.last_name}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={RenterFormik.values.last_name}
+                      onChange={RenterFormik.handleChange}
+                      onBlur={RenterFormik.handleBlur}
                       margin="normal"
                       type="text"
-                      error={formik.touched.last_name && Boolean(formik.errors.last_name)}
-                      helperText={formik.touched.last_name && formik.errors.last_name}
+                      error={RenterFormik.touched.last_name && Boolean(RenterFormik.errors.last_name)}
+                      helperText={RenterFormik.touched.last_name && RenterFormik.errors.last_name}
                       fullWidth
                     />
                   </Grid>
@@ -488,35 +523,55 @@ function Login(props) {
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.username}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={RenterFormik.values.phone}
+                      onChange={RenterFormik.handleChange}
+                      onBlur={RenterFormik.handleBlur}
                       margin="normal"
                       type="number"
-                      error={formik.touched.username && Boolean(formik.errors.username)}
-                      helperText={formik.touched.username && formik.errors.username}
+                      error={RenterFormik.touched.phone && Boolean(RenterFormik.errors.phone)}
+                      helperText={RenterFormik.touched.phone && RenterFormik.errors.phone}
                       fullWidth
                     />
                   </Grid>
                   <Grid item md={12} sm={12} xs={12}>
                     <TextField 
                       label="Email"
-                      name="username"
+                      name="email"
                       InputProps={{
                         classes: {
                           underline: classes.textFieldUnderline,
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.username}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={RenterFormik.values.email}
+                      onChange={RenterFormik.handleChange}
+                      onBlur={RenterFormik.handleBlur}
                       margin="normal"
                       type="email"
-                      error={formik.touched.username && Boolean(formik.errors.username)}
-                      helperText={formik.touched.username && formik.errors.username}
+                      error={RenterFormik.touched.email && Boolean(RenterFormik.errors.email)}
+                      helperText={RenterFormik.touched.email && RenterFormik.errors.email}
                       fullWidth
                     />
+                  </Grid>
+                  <Grid item md={12} sm={12} xs={12}>
+                      <FormControl fullWidth
+                        {...(error && {error:true})}>
+                            <InputLabel>Role</InputLabel>
+                            <MuiSelect
+                                label="Role"
+                                name="role"
+                                value={RenterFormik.values.role}
+                                onChange={RenterFormik.handleChange}
+                                onBlur={RenterFormik.handleBlur}
+                                >
+                                <MenuItem value="">None</MenuItem>
+                                {
+                                    groupList.map(
+                                        item => (<MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>)
+                                    )
+                                }
+                            </MuiSelect>
+                        </FormControl>
                   </Grid>
                   <Grid item md={12} sm={12} xs={12}>
                     <TextField 
@@ -528,13 +583,13 @@ function Login(props) {
                           input: classes.textField,
                         },
                       }}
-                      value={formik.values.password}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={RenterFormik.values.password}
+                      onChange={RenterFormik.handleChange}
+                      onBlur={RenterFormik.handleBlur}
                       margin="normal"
                       type="password"
-                      error={formik.touched.password && Boolean(formik.errors.password)}
-                      helperText={formik.touched.password && formik.errors.password}
+                      error={RenterFormik.touched.password && Boolean(RenterFormik.errors.password)}
+                      helperText={RenterFormik.touched.password && RenterFormik.errors.password}
                       fullWidth  
                    />
                   </Grid>
@@ -549,13 +604,13 @@ function Login(props) {
                         input: classes.textField,
                       },
                     }}
-                    value={formik.values.password2}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
+                    value={RenterFormik.values.password2}
+                    onChange={RenterFormik.handleChange}
+                    onBlur={RenterFormik.handleBlur}
                     margin="normal"
                     type="password"
-                    error={formik.touched.password2 && Boolean(formik.errors.password2)}
-                    helperText={formik.touched.password2 && formik.errors.password2}
+                    error={RenterFormik.touched.password2 && Boolean(RenterFormik.errors.password2)}
+                    helperText={RenterFormik.touched.password2 && RenterFormik.errors.password2}
                     fullWidth
                   />
                 </Grid>
@@ -567,17 +622,17 @@ function Login(props) {
                       ) : (
                         <Controls.Button
                             type="submit"
-                            disabled={
-                              formik.isSubmitting,
-                              formik.values.first_name.length === 0 || formik.values.last_name.length === 0 || formik.values.username.length === 0 || formik.values.password.length === 0 || formik.values.password2.length === 0
-                            }
+                            // disabled={
+                            //   RenterFormik.isSubmitting,
+                            //   RenterFormik.values.first_name.length === 0 || RenterFormik.values.last_name.length === 0 || RenterFormik.values.username.length === 0 || RenterFormik.values.password.length === 0 || RenterFormik.values.password2.length === 0
+                            // }
                             text="Sign Up"
                         />
                       )}
                         <Controls.Button
                             text="Reset"
                             color="default"
-                            onClick = {formik.resetForm}
+                            onClick = {RenterFormik.resetForm}
                         />
                     </div> 
                 </Grid>
