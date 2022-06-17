@@ -91,24 +91,34 @@ function Login(props) {
   var [nameValue, setNameValue] = useState("");
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
-  const [ userList, setUserList] = useState(null);
-  const [ groupList, setGroupList] = useState(null);
+  const [ userList, setUserList] = useState([]);
+  const [ groupList, setGroupList] = useState([]);
   const [message, setMessage] = useState(null)
 
 
   const validationSchema = yup.object().shape({
     first_name: yup.string().required("First Name is required"),
-    last_name: yup.string().required("First Name is required"),
-    phone: yup.number().required("Phone number is required."),
+    last_name: yup.string().required("Last Name is required"),
+    phone: yup
+    .number()
+    .typeError("Invalid Input: numbers please")
+    // .max(11, "Not more than 11")
+    .positive("Must be greater than zero")
+    .required("Phone number is required.")
+    .integer(),
     email: yup.string().required("Email is required")
     .test("Unique", "Email already exist.Try other.", (values) => {
       return duplicateUserNameCheck(userList, values)
     }),
-    password: yup.string().required("Password is required").test((values)=>{
+    password: yup
+    .string()
+    .required("Password is required")
+    .test((values)=>{
       holdPassword = values
       return true
     }),
-    password2: yup.string()
+    password2: yup
+    .string()
     .required("Confirm Password is required")
     .test("Match", "Password doesn't match!", (values) => {
       if (values === holdPassword){
@@ -563,6 +573,8 @@ function Login(props) {
                                 value={RenterFormik.values.role}
                                 onChange={RenterFormik.handleChange}
                                 onBlur={RenterFormik.handleBlur}
+                                error={RenterFormik.touched.role && Boolean(RenterFormik.errors.role)}
+                                helperText={RenterFormik.touched.role && RenterFormik.errors.role}
                                 >
                                 <MenuItem value="">None</MenuItem>
                                 {
@@ -622,10 +634,11 @@ function Login(props) {
                       ) : (
                         <Controls.Button
                             type="submit"
-                            // disabled={
-                            //   RenterFormik.isSubmitting,
-                            //   RenterFormik.values.first_name.length === 0 || RenterFormik.values.last_name.length === 0 || RenterFormik.values.username.length === 0 || RenterFormik.values.password.length === 0 || RenterFormik.values.password2.length === 0
-                            // }
+                            disabled={
+                              RenterFormik.isSubmitting,
+                              RenterFormik.values.first_name.length === 0 || RenterFormik.values.last_name.length === 0 || RenterFormik.values.phone.length === 0 ||
+                              RenterFormik.values.email.length === 0 || RenterFormik.values.role.length === 0 || RenterFormik.values.password.length === 0 || RenterFormik.values.password2.length === 0
+                            }
                             text="Sign Up"
                         />
                       )}
