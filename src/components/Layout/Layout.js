@@ -32,6 +32,7 @@ import Charts from "../../pages/charts";
 import MachineHistory from "../../pages/reports/MachineHistory";
 import FindMachinePosition from "../../pages/reports/FindMachinePosition";
 import Profile from "../../pages/profile/Profile";
+import ProfileDetail from "../../pages/profile/ProfileDetail";
 
 // context
 import { useLayoutState } from "../../context/LayoutContext";
@@ -72,6 +73,7 @@ function Layout(props) {
             <Route path="/app/tables" component={Tables} />
             <Route path="/app/notifications" component={Notifications} />
             <Route path="/app/profile" component={Profile} />
+            <Route path="/app/pro/detail" component={ProfileDetail} />
             <Route
               exact
               path="/app/ui"

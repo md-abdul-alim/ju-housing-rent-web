@@ -37,14 +37,6 @@ const GreenTextTypography = withStyles({
   }
 })(Typography);
 
-var initialHouseOwnerValues = {
-  id: 0,
-  first_name: "",
-  last_name: "",
-  email: "",
-  password: "",
-  password2: ""
-};
 
 var initialRenterValues = {
   id: 0,
@@ -128,14 +120,6 @@ function Login(props) {
     }),
   });
 
-  const HouseOwnerFormik = useFormik({
-    initialValues: initialHouseOwnerValues,
-    validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => {
-      setSubmitting(true);
-      addOrEdit(values, resetForm, setSubmitting);
-    },
-  });
 
   const RenterFormik = useFormik({
     initialValues: initialRenterValues,
@@ -189,6 +173,7 @@ function Login(props) {
           localStorage.setItem('first_name', res.data.first_name)
           localStorage.setItem('last_name', res.data.last_name)
           localStorage.setItem('user_type', res.data.user_type)
+          localStorage.setItem('account_complete_status', res.data.account_complete_status)
           setError(null)
           dispatch({ type: 'LOGIN_SUCCESS', payload: res.data })
           setIsLoading(false);
@@ -330,146 +315,6 @@ function Login(props) {
               </Form>
             </React.Fragment>
           )}
-          {/* {activeTabId === 1 && (
-            <React.Fragment>
-              <Typography variant="h2" className={classes.subGreeting}>
-                Create your account
-              </Typography>
-              <Fade in={message}>
-                <GreenTextTypography variant="subtitle1">
-                  {message}
-                </GreenTextTypography>
-              </Fade>
-              <Form onSubmit={HouseOwnerFormik.handleSubmit}>
-                <Grid container justify="space-between" alignItems="flex-start" spacing={0}>
-                  <Grid item md={12} sm={12} xs={12}>
-                    <TextField
-                      label="First Name"
-                      name="first_name"
-                      id="name"
-                      InputProps={{
-                        classes: {
-                          underline: classes.textFieldUnderline,
-                          input: classes.textField,
-                        },
-                      }}
-                      value={HouseOwnerFormik.values.first_name}
-                      onChange={HouseOwnerFormik.handleChange}
-                      onBlur={HouseOwnerFormik.handleBlur}
-                      margin="normal"
-                      type="text"
-                      error={HouseOwnerFormik.touched.first_name && Boolean(HouseOwnerFormik.errors.first_name)}
-                      helperText={HouseOwnerFormik.touched.first_name && HouseOwnerFormik.errors.first_name}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item md={12} sm={12} xs={12}>
-                    <TextField 
-                      label="Last Name"
-                      name="last_name"
-                      InputProps={{
-                        classes: {
-                          underline: classes.textFieldUnderline,
-                          input: classes.textField,
-                        },
-                      }}
-                      value={HouseOwnerFormik.values.last_name}
-                      onChange={HouseOwnerFormik.handleChange}
-                      onBlur={HouseOwnerFormik.handleBlur}
-                      margin="normal"
-                      type="text"
-                      error={HouseOwnerFormik.touched.last_name && Boolean(HouseOwnerFormik.errors.last_name)}
-                      helperText={HouseOwnerFormik.touched.last_name && HouseOwnerFormik.errors.last_name}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item md={12} sm={12} xs={12}>
-                    <TextField 
-                      label="Email"
-                      name="email"
-                      InputProps={{
-                        classes: {
-                          underline: classes.textFieldUnderline,
-                          input: classes.textField,
-                        },
-                      }}
-                      value={HouseOwnerFormik.values.email}
-                      onChange={HouseOwnerFormik.handleChange}
-                      onBlur={HouseOwnerFormik.handleBlur}
-                      margin="normal"
-                      type="email"
-                      error={HouseOwnerFormik.touched.email && Boolean(HouseOwnerFormik.errors.email)}
-                      helperText={HouseOwnerFormik.touched.email && HouseOwnerFormik.errors.email}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item md={12} sm={12} xs={12}>
-                    <TextField 
-                      label="Password"
-                      name="password"
-                      InputProps={{
-                        classes: {
-                          underline: classes.textFieldUnderline,
-                          input: classes.textField,
-                        },
-                      }}
-                      value={HouseOwnerFormik.values.password}
-                      onChange={HouseOwnerFormik.handleChange}
-                      onBlur={HouseOwnerFormik.handleBlur}
-                      margin="normal"
-                      type="password"
-                      error={HouseOwnerFormik.touched.password && Boolean(HouseOwnerFormik.errors.password)}
-                      helperText={HouseOwnerFormik.touched.password && HouseOwnerFormik.errors.password}
-                      fullWidth  
-                   />
-                  </Grid>
-                
-                <Grid item md={12} sm={12} xs={12}>
-                  <TextField 
-                    label="Confirm Password"
-                    name="password2"
-                    InputProps={{
-                      classes: {
-                        underline: classes.textFieldUnderline,
-                        input: classes.textField,
-                      },
-                    }}
-                    value={HouseOwnerFormik.values.password2}
-                    onChange={HouseOwnerFormik.handleChange}
-                    onBlur={HouseOwnerFormik.handleBlur}
-                    margin="normal"
-                    type="password"
-                    error={HouseOwnerFormik.touched.password2 && Boolean(HouseOwnerFormik.errors.password2)}
-                    helperText={HouseOwnerFormik.touched.password2 && HouseOwnerFormik.errors.password2}
-                    fullWidth
-                  />
-                </Grid>
-                
-                <Grid item style={{ marginTop: 3 }} md={12} sm={12} xs={12}>
-                    <div className={classes.wrapper}>
-                    {isLoading ? (
-                        <CircularProgress size={26} className={classes.loginLoader} />
-                      ) : (
-                        <Controls.Button
-                            type="submit"
-                            // disabled={
-                            //   HouseOwnerFormik.isSubmitting,
-                            //   HouseOwnerFormik.values.first_name.length === 0 || HouseOwnerFormik.values.last_name.length === 0 || HouseOwnerFormik.values.username.length === 0 || HouseOwnerFormik.values.password.length === 0 || HouseOwnerFormik.values.password2.length === 0
-                            // }
-                            text="Sign Up"
-                        />
-                      )}
-                        <Controls.Button
-                            text="Reset"
-                            color="default"
-                            onClick = {HouseOwnerFormik.resetForm}
-                        />
-                    </div> 
-                </Grid>
-                </Grid>
-              </Form>
-            </React.Fragment>
-          )} */}
           {activeTabId === 1 && (
             <React.Fragment>
               <Typography variant="h2" className={classes.subGreeting}>

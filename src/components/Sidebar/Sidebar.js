@@ -11,6 +11,7 @@ import {
   HelpOutline as FAQIcon,
   ArrowBack as ArrowBackIcon,
   ViewList as ViewListIcon,
+  Details as DetailsIcon
 } from "@material-ui/icons";
 import SettingsIcon from '@material-ui/icons/Settings';
 import AssessmentIcon from '@material-ui/icons/Assessment';
@@ -36,6 +37,12 @@ const structure = [
   { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
   {
     id: 1,
+    label: "Profile",
+    link: "/app/pro/detail",
+    icon: <DetailsIcon />,
+  },
+  {
+    id: 2,
     label: "Machines",
     link: "/app/machines",
     icon: <ViewListIcon />,
