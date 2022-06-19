@@ -139,20 +139,6 @@ function Login(props) {
       resetForm();
     },
   });
-  useEffect(() => {
-    async function getUsers() {
-      const response = await fetch("/api/user/list");
-      const body = await response.json();
-      setUserList(body);
-    }
-    getUsers();
-    async function getGroups() {
-      const response = await fetch("/api/group/list");
-      const body = await response.json();
-      setGroupList(body);
-    }
-    getGroups();
-  }, []);
 
   const login = async (values) => {
     setIsLoading(true);
@@ -168,7 +154,8 @@ function Login(props) {
       .post("/api/token/", values, requestOptions)
       .then((res) => {
         setTimeout(() => {
-          localStorage.setItem('id_token', res.data.refresh)
+          localStorage.setItem('refresh_token', res.data.refresh)
+          localStorage.setItem('access_token', res.data.access)
           localStorage.setItem('id', res.data.id)
           localStorage.setItem('first_name', res.data.first_name)
           localStorage.setItem('last_name', res.data.last_name)
@@ -225,10 +212,25 @@ function Login(props) {
     resetForm();
   };
 
+  useEffect(() => {
+    async function getUsers() {
+      const response = await fetch("/api/user/list");
+      const body = await response.json();
+      setUserList(body);
+    }
+    getUsers();
+    async function getGroups() {
+      const response = await fetch("/api/group/list");
+      const body = await response.json();
+      setGroupList(body);
+    }
+    getGroups();
+  }, []);
+
   return (
     <Grid container className={classes.container}>
       <div className={classes.logotypeContainer}>
-        {/* <Typography className={classes.logotypeText}>Dekko Isho Group</Typography> */}
+        {/* <Typography className={classes.logotypeText}>Jahangirnogar University</Typography> */}
       </div>
       <div className={classes.formContainer}>
         <div className={classes.form}>
@@ -240,7 +242,6 @@ function Login(props) {
             centered
           >
             <Tab label="Login" classes={{ root: classes.tab }} />
-            {/* <Tab label="House Owner" classes={{ root: classes.tab }} /> */}
             <Tab label="New User" classes={{ root: classes.tab }} />
           </Tabs>
           {activeTabId === 0 && (

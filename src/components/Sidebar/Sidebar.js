@@ -38,7 +38,7 @@ const structure = [
   {
     id: 1,
     label: "Profile",
-    link: "/app/pro/detail",
+    link: "/app/profile",
     icon: <DetailsIcon />,
   },
   {

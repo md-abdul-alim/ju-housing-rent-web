@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import classnames from "classnames";
 
 // styles
@@ -16,18 +16,20 @@ export default function Footer({ theme }) {
         className={`footer flex flex-middle ${classnames(classes.fixedBottom)}`}
       >
         <div className="flex flex-middle container px-sm-30 w-100">
-          <a href="https://www.dekkoisho.com/" className="mr-8" target="_blank">
-            <span>&copy; 2021 Dekko Isho IT.</span>
-          </a>
-          {/* <a href="https://ui-lib.com/downloads/matx-pro-react-material-design-admin-template/">
-            <Button variant="contained" color="secondary">
-              Get MatX Pro
+            <p className="m-0">PMSCS Batch:  
+            <Button variant="contained" color="Primary">
+              26
             </Button>
-          </a> */}
+            </p>
+            
           <span className="m-auto"></span>
-          <p className="m-0">
+          <p className="m-0" style={{textAlign: 'right'}}>
             Design and Developed by{" "}
-            <a href="https://www.linkedin.com/in/md-abdul-alim-milon/" target="_blank">Md. Abdul Alim</a>
+            <a href="https://www.linkedin.com/in/md-abdul-alim-milon/" target="_blank">
+              <Button variant="contained" color="secondary">
+                Md. Abdul Alim
+              </Button>
+            </a>
           </p>
         </div>
       </div>

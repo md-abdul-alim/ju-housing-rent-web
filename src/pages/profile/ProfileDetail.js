@@ -30,7 +30,6 @@ function ProfileDetail(props) {
   });
   return (
     <div>
-      <BreadCrumb routeSegments={[{ name: "Machine Details" }]} />
       <Paper
         elevation={3}
         square={false}
@@ -43,58 +42,54 @@ function ProfileDetail(props) {
                 <TableBody>
                   <TableRow>
                     <TableCell>Name:</TableCell>
-                    <TableCell align="right">
-                      {machine.name}
-                    </TableCell>
+                    <TableCell align="right">{machine.name}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Model No:</TableCell>
-                    <TableCell align="right">
-                      {machine.model_no}
-                    </TableCell>
+                    <TableCell>Email:</TableCell>
+                    <TableCell align="right">{machine.model_no}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Parent Unit:</TableCell>
+                    <TableCell>Phone:</TableCell>
                     <TableCell align="right">{machine.parent_unit_name}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Current Unit:</TableCell>
+                    <TableCell>Birthday:</TableCell>
                     <TableCell align="right">{machine.current_unit_name}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Line:</TableCell>
-                    <TableCell align="right">
-                      {machine.line}
-                    </TableCell>
+                    <TableCell>NID:</TableCell>
+                    <TableCell align="right">{machine.line}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Category:</TableCell>
+                    <TableCell>Passport:</TableCell>
                     <TableCell align="right">{machine.category_value}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Type:</TableCell>
+                    <TableCell>Married Status:</TableCell>
                     <TableCell align="right">{machine.type_value}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Brand:</TableCell>
-                    <TableCell align="right">
-                      {machine.brand}
-                    </TableCell>
+                    <TableCell>Occupation:</TableCell>
+                    <TableCell align="right">{machine.brand}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Supplier:</TableCell>
-                    <TableCell align="right">
-                      {machine.supplier}
-                    </TableCell>
+                    <TableCell>Occupation Institution:</TableCell>
+                    <TableCell align="right">{machine.supplier}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Description:</TableCell>
-                    <TableCell align="right">
-                      {machine.description}
-                    </TableCell>
+                    <TableCell>Education Qualification:</TableCell>
+                    <TableCell align="right">{machine.description}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Acquisition Value:</TableCell>
+                    <TableCell>Religion:</TableCell>
+                    <TableCell align="right">{machine.acquisition_value}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Present Address:</TableCell>
+                    <TableCell align="right">{machine.acquisition_value}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Permanent Address:</TableCell>
                     <TableCell align="right">{machine.acquisition_value}</TableCell>
                   </TableRow>
                 </TableBody>
