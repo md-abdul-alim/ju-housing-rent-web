@@ -3,7 +3,6 @@ import {
   Grid,
   CircularProgress,
   Typography,
-  Button,
   Tabs,
   Tab,
   TextField,
@@ -14,22 +13,17 @@ import {
   MenuItem
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-import classnames from "classnames";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Form } from "../../components/Form/useForm";
-import Notification from "../../components/SnackBar/Notification";
 import Controls from "../../components/Controls/Controls";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 // styles
 import useStyles from "./styles";
 
-// logo
-import google from "../../images/google.svg";
-
 // context
-import { useUserDispatch, loginUser } from "../../context/UserContext";
+import { useUserDispatch } from "../../context/UserContext";
 
 const GreenTextTypography = withStyles({
   root: {
@@ -80,9 +74,6 @@ function Login(props) {
   var [isLoading, setIsLoading] = useState(false);
   var [error, setError] = useState(null);
   var [activeTabId, setActiveTabId] = useState(0);
-  var [nameValue, setNameValue] = useState("");
-  var [loginValue, setLoginValue] = useState("");
-  var [passwordValue, setPasswordValue] = useState("");
   const [ userList, setUserList] = useState([]);
   const [ groupList, setGroupList] = useState([]);
   const [message, setMessage] = useState(null)
@@ -305,7 +296,7 @@ function Login(props) {
                       <Controls.Button
                           type="submit"
                           disabled={
-                            LoginFormik.isSubmitting,
+                            LoginFormik.isSubmitting, 
                             LoginFormik.values.username.length === 0 || LoginFormik.values.password.length === 0
                           }
                           text="Login"

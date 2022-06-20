@@ -82,7 +82,7 @@ const DriverForm = (props) => {
       setUnits(body);
     }
     getUnits();
-}, []);
+});
 
   useEffect(() => {
     if (recordForEdit != null)

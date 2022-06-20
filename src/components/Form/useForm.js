@@ -5,7 +5,6 @@ export function useForm(initialFValues) {
 
 
     const [values, setValues] = useState(initialFValues);
-    const [errors, setErrors] = useState({});
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -17,7 +16,6 @@ export function useForm(initialFValues) {
 
     const resetForm = () => {
         setValues(initialFValues);
-        setErrors({})
     }
 
     return {

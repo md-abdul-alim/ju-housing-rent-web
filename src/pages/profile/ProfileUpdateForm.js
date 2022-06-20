@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form } from "../../components/Form/useForm";
 import Controls from "../../components/Controls/Controls";
 import { useFormik } from "formik";
@@ -9,7 +9,6 @@ import Notification from "../../components/SnackBar/Notification";
 import {
   Paper,
   Grid,
-  CircularProgress,
 } from "@material-ui/core";
 
 const style = makeStyles({
@@ -35,7 +34,6 @@ var initialValues = {
 var passwordHold = "";
 const ProfileUpdateForm = (props) => {
   var userId = localStorage.getItem('id');
-  const [passwordMissMatchError, setPasswordMissMatchError] = useState("")
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",

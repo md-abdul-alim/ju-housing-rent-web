@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 export default function Playground(props) {
-    const { name, value, label, onChange, options, onBlur, fullWidth } = props;
+    const { name, value, label, onChange, options, onBlur } = props;
 
   const optionsProps = {
     options: options.map((option) => option.name),

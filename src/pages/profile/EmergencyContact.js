@@ -8,7 +8,6 @@ import Popup from "../../components/Controls/Popup";
 import Notification from "../../components/SnackBar/Notification";
 import { makeStyles, Tooltip } from "@material-ui/core";
 import {EmergencyContactForm} from "./EmergencyContactForm";
-import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -96,15 +95,6 @@ export default function EmergencyContact() {
   }
 
   const postFabricType = async (values, setSubmitting) => {
-    const requestOptions = {
-      headers: {
-        method: "POST",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      },
-    };
 
     try {
       await axios
@@ -119,16 +109,6 @@ export default function EmergencyContact() {
   };
 
   const updateFabricType = async (values, setSubmitting) => {
-    const requestOptions = {
-      headers: {
-        method: "PUT",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      },
-    };
-
     try {
       await axios
         .put(`/api/line/name/update/${values.id}/`, values, AxiosHeader)
@@ -184,7 +164,7 @@ export default function EmergencyContact() {
         customBodyRender: (value, tableMeta, updateValue) => {
           let item;
           tableMeta.tableData.forEach(function (fabricType) {
-            if (fabricType.id == tableMeta.rowData[0])
+            if (fabricType.id === tableMeta.rowData[0])
               return (item = fabricType);
           });
           return (

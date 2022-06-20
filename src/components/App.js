@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import "../styles/_app.scss";
-import { MachineProvider, initialState } from '../context/index'
 
 // components
 import Layout from "./Layout";
@@ -18,7 +17,6 @@ export default function App() {
   var { isAuthenticated } = useUserState();
 
   return (
-    <MachineProvider initialState={initialState}>
     <BrowserRouter>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
@@ -32,7 +30,6 @@ export default function App() {
         <Route component={Error} />
       </Switch>
     </BrowserRouter>
-    </MachineProvider>
   );
 
   // #######################################################################

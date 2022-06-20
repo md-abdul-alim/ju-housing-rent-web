@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Form } from "../../components/Form/useForm";
+import { Form } from "../../components/Form/useForm";
 import Controls from "../../components/Controls/Controls";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  InputLabel,
-  Icon,
   Grid,
-  Radio,
-  RadioGroup,
-  FormControl,
-  MenuItem,
-  TextField,
   CircularProgress,
-  FormHelperText,
 } from "@material-ui/core";
-import { VerticalAlignCenter } from "@material-ui/icons";
 
 const style = makeStyles({
   wrapper: {
@@ -52,12 +43,11 @@ var initialFValues = {
 
 
 const ProfileForm = (props) => {
-  const [categories, setCategories] = useState([]);
-  const [types, setTypes] = useState([]);
+
   const [units, setUnits] = useState([]);
 
 
-  const { addOrEdit, recordForEdit, fabricList } = props;
+  const { addOrEdit, recordForEdit, userId } = props;
 
   const validationSchema = yup.object().shape({
     model_no: yup.string().required("Model No is required"),
@@ -69,8 +59,6 @@ const ProfileForm = (props) => {
   });
 
   
-
-  const { values, setValues, handleChange } = useForm(initialFValues);
 
   const classes = style();  
 
@@ -90,51 +78,10 @@ const ProfileForm = (props) => {
       });
   }, [recordForEdit]);
 
-  useEffect(() => {
-    async function getCategory() {
-      const response = await fetch("/api/machine/category/list/", {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-      },
-    });
-      const body = await response.json();
-      setCategories(body);
-    }
-    getCategory();
-
-    async function getTypes() {
-      const response = await fetch("/api/machine/type/list/", {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-        },
-      });
-      const body = await response.json();
-      setTypes(body);
-    }
-    getTypes();
-
-    async function getUnits() {
-      const response = await fetch("/api/unit/name/list/", {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-        },
-      });
-      const body = await response.json();
-      setUnits(body);
-    }
-    getUnits();
-
-  }, []);
-
 
   return (
     <Form onSubmit={formik.handleSubmit}>
+      <p>{userId}</p>
       <Grid container alignItems="flex-start" spacing={1}>
       <Grid item md={3} sm={4} xs={6}>
           <Controls.Input

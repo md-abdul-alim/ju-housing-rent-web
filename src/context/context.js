@@ -1,5 +1,4 @@
 import React, { useReducer } from "react";
-import { MachineReducer } from "./reducer";
 const MachineStateContext = React.createContext();
 const MachineDispatchContext = React.createContext();
 
@@ -22,7 +21,7 @@ export function useMachineDispatch() {
 }
 
 export const MachineProvider = ({ children, initialState }) => {
-  const [fabric, dispatch] = useReducer(MachineReducer, initialState);
+  const [fabric, dispatch] = useReducer(initialState);
 
   return (
     <MachineStateContext.Provider value={fabric}>

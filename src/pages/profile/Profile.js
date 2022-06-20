@@ -13,20 +13,20 @@ function Profile() {
     <div>
       <BreadCrumb routeSegments={[{ name: "Profile" }]} />
           <Grid container>
-                <Grid item md={3} sm={12} xs={12}>
+                <Grid item md={5} sm={12} xs={12}>
                     <ProfileDetail/>
                 </Grid>
-                <Grid container  md={9} sm={6} xs={12}>
-                  <Grid item md={3} sm={6} xs={12}>
+                <Grid container item md={7} sm={6} xs={12}>
+                  <Grid item md={6} sm={6} xs={12}>
                     <FamilyMember/>
                   </Grid>
-                  <Grid item md={3} sm={6} xs={12}>
+                  <Grid item md={6} sm={6} xs={12}>
                     <EmergencyContact/>
                   </Grid>
-                  <Grid item md={3} sm={6} xs={12}>
+                  <Grid item md={6} sm={6} xs={12}>
                     <HomeCleaner/>
                   </Grid>
-                  <Grid item md={3} sm={6} xs={12}>
+                  <Grid item md={6} sm={6} xs={12}>
                     <HomeDriver/>
                   </Grid>
                 </Grid>
