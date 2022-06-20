@@ -107,7 +107,7 @@ const ProfileForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={3} sm={4} xs={6}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="Email"
             name="email"
@@ -119,7 +119,7 @@ const ProfileForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={3} sm={4} xs={6}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="Phone"
             name="phone"
@@ -132,7 +132,7 @@ const ProfileForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={3} sm={4} xs={6}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.DatePicker
               label="Birthday"
               name="birthday"
@@ -144,7 +144,7 @@ const ProfileForm = (props) => {
               fullWidth
             />
         </Grid>
-        <Grid item md={3} sm={4} xs={6}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="NID"
             name="nid"
@@ -156,7 +156,7 @@ const ProfileForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={3} sm={4} xs={6}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="Passport"
             name="passport"
@@ -181,6 +181,18 @@ const ProfileForm = (props) => {
             />
         </Grid>
         <Grid item md={3} sm={4} xs={6}>
+          <Controls.Select
+              label="Religion"
+              name="religion"
+              value={formik.values.religion}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              options={units}
+              error={formik.touched.religion && Boolean(formik.errors.religion)}
+              helperText={formik.touched.religion && formik.errors.religion}
+            />
+        </Grid>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="Occupation"
             name="occupation"
@@ -192,7 +204,7 @@ const ProfileForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={3} sm={4} xs={6}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="Occupation Institution"
             name="occupation_institution"
@@ -204,7 +216,7 @@ const ProfileForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={3} sm={4} xs={6}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="Education Qualification"
             name="education_qualification"
@@ -215,18 +227,6 @@ const ProfileForm = (props) => {
             helperText={formik.touched.education_qualification && formik.errors.education_qualification}
             fullWidth
           />
-        </Grid>
-        <Grid item md={3} sm={4} xs={6}>
-          <Controls.Select
-              label="Religion"
-              name="religion"
-              value={formik.values.religion}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              options={units}
-              error={formik.touched.religion && Boolean(formik.errors.religion)}
-              helperText={formik.touched.religion && formik.errors.religion}
-            />
         </Grid>
         <Grid item md={6} sm={6} xs={12}>
           <Controls.Input
