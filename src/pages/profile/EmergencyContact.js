@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import axios from "axios";
 import IconButton from "@material-ui/core/IconButton";
 import Popup from "../../components/Controls/Popup";
@@ -28,7 +29,7 @@ export default function EmergencyContact() {
   const classes = useStyles();
   const [lineNameList, setLineNameList] = useState([]);
   const [recordForEdit, setRecordForEdit] = useState(null);
-  const [fabricTypeRecord, setFabricTypeRecord] = useState(null);
+  const [familyMembersRecord, setFamilyMembersRecord] = useState(null);
   const [openPopup, setOpenPopup] = useState(false);
 
 
@@ -78,11 +79,11 @@ export default function EmergencyContact() {
      }
   });
 
-  async function fetchFabricTypes() {
+  async function fetchFamilyMembers() {
 
     try {
       await axios
-        .get("/api/line/name/list/", AxiosHeader)
+        .get("/api/profile/family/member/list/", AxiosHeader)
         .then((res) => {
           setLineNameList(res.data);
         })
@@ -94,13 +95,13 @@ export default function EmergencyContact() {
     }
   }
 
-  const postFabricType = async (values, setSubmitting) => {
+  const postFamilyMember = async (values, setSubmitting) => {
 
     try {
       await axios
-        .post("/api/line/name/create/", values, AxiosHeader)
+        .post("/api/profile/family/member/create/", values, AxiosHeader)
         .then((resp) => {
-          setFabricTypeRecord(resp.data);
+          setFamilyMembersRecord(resp.data);
           setSubmitting(false);
         });
     } catch (error) {
@@ -108,23 +109,40 @@ export default function EmergencyContact() {
     }
   };
 
-  const updateFabricType = async (values, setSubmitting) => {
+  const updateFamilyMember = async (values, setSubmitting) => {
+
     try {
       await axios
-        .put(`/api/line/name/update/${values.id}/`, values, AxiosHeader)
+        .put(`/api/profile/family/member/update/`, values, AxiosHeader)
         .then((resp) => {
-          setFabricTypeRecord(resp.data);
+          setFamilyMembersRecord(resp.data);
           setSubmitting(false);
         });
     } catch (error) {
       console.log(error);
     }
   };
+
+  const deleteFamilyMember = async (values) => {
+    await axios
+      .delete(`/api/profile/family/member/delete/`, {
+        params: { member: values.id },
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+        },
+      }) 
+      .then((resp) => {
+        setFamilyMembersRecord(resp.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    };
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
-    fetchFabricTypes();
-  }, [fabricTypeRecord]);
+    fetchFamilyMembers();
+  }, [familyMembersRecord]);
 
   const openInPopup = (item) => {
     setRecordForEdit(item);
@@ -142,16 +160,40 @@ export default function EmergencyContact() {
       },
     },
     {
-      name: "unit_name",
-      label: "Unit",
+      name: "name",
+      label: "Name",
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: "name",
-      label: "Name",
+      name: "age",
+      label: "Age",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "phone",
+      label: "Phone",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "relation",
+      label: "Relation",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "occupation",
+      label: "Occupation",
       options: {
         filter: true,
         sort: true,
@@ -169,14 +211,25 @@ export default function EmergencyContact() {
           });
           return (
             <>
-              <IconButton
-                color="primary"
-                onClick={() => {
-                  openInPopup(item);
-                }}
-              >
-                <EditIcon fontSize="default" />
-              </IconButton>
+              <Tooltip title={"Update"}>
+                <IconButton
+                  color="primary"
+                  onClick={() => {
+                    openInPopup(item);
+                  }}
+                >
+                  <EditIcon fontSize="default" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={"Delete"}>
+                <IconButton
+                  onClick={() => {
+                      deleteFamilyMember(item);
+                  }}
+                >
+                  <DeleteIcon fontSize="default" style={{color: "red"}} />
+                </IconButton>
+              </Tooltip>
             </>
           );
         },
@@ -184,9 +237,9 @@ export default function EmergencyContact() {
     },
   ];
 
-  const addOrEdit = (fabricType, resetForm, setSubmitting) => {
-    if (fabricType.id === 0) postFabricType(fabricType, setSubmitting);
-    else updateFabricType(fabricType, setSubmitting);
+  const addOrEdit = (familyMember, resetForm, setSubmitting) => {
+    if (familyMember.id === 0) postFamilyMember(familyMember, setSubmitting);
+    else updateFamilyMember(familyMember, setSubmitting);
     resetForm();
     setRecordForEdit(null);
     setOpenPopup(false);
@@ -234,7 +287,7 @@ export default function EmergencyContact() {
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
-        <EmergencyContactForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} lineNameList={lineNameList} />
+        <EmergencyContactForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
     </div>

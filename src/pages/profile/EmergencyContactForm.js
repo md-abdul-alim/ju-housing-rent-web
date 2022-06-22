@@ -25,64 +25,38 @@ const style = makeStyles({
 
 var initialValues = {
   id: 0,
-  unit: "",
-  name: "",
+  type: "family",
+  name: "x",
+  age: "32",
+  phone: "324",
+  relation: "fs",
+  occupation: "ds",
 };
 
 
 
 const EmergencyContactForm = (props) => {
 
-  const { addOrEdit, recordForEdit, lineNameList } = props;
-
-  const [units, setUnits] = useState([]);
-  const [ errorMessage, setErrorMessage ] = useState("")
-  
-  // console.log(lineNameList)
+  const { addOrEdit, recordForEdit } = props;
 
   const validationSchema = yup.object().shape({
-    unit: yup.string().required("Unit is required"),
     name: yup.string().required("Name is required"),
+    age: yup.string().required("Age is required"),
+    relation: yup.string().required("Relation is required"),
   });
 
   const classes = style();
 
-  function duplicateUnitLineNameCheck(values){
-    for(let i=0; i < lineNameList.length; i++){
-      if(values.unit === lineNameList[i].unit & values.name === lineNameList[i].name){
-        return false
-      }
-    }
-    return true
-  }
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
-      setSubmitting(true);
-      if(duplicateUnitLineNameCheck(values)){
-        setErrorMessage("")
+        setSubmitting(true);
         addOrEdit(values, resetForm, setSubmitting);
-      }else{
-        setErrorMessage("Unit & Line name must be unique.")
-        setSubmitting(false);
-      }
     },
   });
 
-  useEffect(() => {
-    async function getUnits() {
-      const response = await fetch("/api/unit/name/list/", {headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-      },});
-      const body = await response.json();
-      setUnits(body);
-    }
-    getUnits();
-}, []);
 
   useEffect(() => {
     if (recordForEdit != null)
@@ -96,18 +70,6 @@ const EmergencyContactForm = (props) => {
     <Form onSubmit={formik.handleSubmit}>
       <Grid container alignItems="flex-start" spacing={2}>
         <Grid item md={12} sm={12} xs={12}>
-          <Controls.Select
-              label="Unit"
-              name="unit"
-              value={formik.values.unit}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              options={units}
-              error={formik.touched.unit && Boolean(formik.errors.unit)}
-              helperText={formik.touched.unit && formik.errors.unit}
-            />
-        </Grid>
-        <Grid item md={12} sm={12} xs={12}>
           <Controls.Input
             label="Name"
             name="name"
@@ -119,8 +81,50 @@ const EmergencyContactForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={12} sm={12} xs={12}>
-          <p style={{fontSize: "15px", margin: "0px", color: "red"}}>{errorMessage.length > 0 ? errorMessage : null}</p>
+        <Grid item md={6} sm={6} xs={12}>
+          <Controls.Input
+            label="Age"
+            name="age"
+            value={formik.values.age}
+            onChange={formik.handleChange}
+            type="number"
+            error={formik.touched.age && Boolean(formik.errors.age)}
+            helperText={formik.touched.age && formik.errors.age}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <Controls.Input
+            label="Phone"
+            name="phone"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+            error={formik.touched.phone && Boolean(formik.errors.phone)}
+            helperText={formik.touched.phone && formik.errors.phone}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <Controls.Input
+            label="Relation"
+            name="relation"
+            value={formik.values.relation}
+            onChange={formik.handleChange}
+            error={formik.touched.relation && Boolean(formik.errors.relation)}
+            helperText={formik.touched.relation && formik.errors.relation}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <Controls.Input
+            label="Occupation"
+            name="occupation"
+            value={formik.values.occupation}
+            onChange={formik.handleChange}
+            error={formik.touched.occupation && Boolean(formik.errors.occupation)}
+            helperText={formik.touched.occupation && formik.errors.occupation}
+            fullWidth
+          />
         </Grid>
         <Grid item style={{ marginTop: 16 }}>
           <div className={classes.wrapper}>
@@ -136,7 +140,6 @@ const EmergencyContactForm = (props) => {
               text="Reset"
               color="default"
               onClick={(e)=>{
-                setErrorMessage("")
                 formik.resetForm(e)
               }}
             />

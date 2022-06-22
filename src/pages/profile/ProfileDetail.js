@@ -19,6 +19,12 @@ function ProfileDetail(props) {
   const [profileData, setProfileData] = useState([])
   const [updateSignal, setUpdateSignal] = useState(null);
 
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
+
   const AxiosHeader = {
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -43,6 +49,30 @@ function ProfileDetail(props) {
       console.log(error);
     }
   }
+
+  const updateProfile = async (values, setSubmitting) => {
+
+    try {
+      await axios
+        .put(`/api/profile/update/`, values, AxiosHeader)
+        .then((resp) => {
+          setUpdateSignal(resp.data);
+          setSubmitting(false);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addOrEdit = (userData, setSubmitting) => {
+    updateProfile(userData, setSubmitting);
+    setOpenPopup(false);
+    setNotify({
+      isOpen: true,
+      message: "Submitted Successfully",
+      type: "success",
+    });
+  };
 
   useEffect(() => {
     fetchProfile();
@@ -87,7 +117,7 @@ function ProfileDetail(props) {
                   </TableRow>
                   <TableRow>
                     <TableCell>Married Status:</TableCell>
-                    <TableCell align="right">{userData.married_status}</TableCell>
+                    <TableCell align="right">{userData.married_status_name}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Occupation:</TableCell>
@@ -109,7 +139,7 @@ function ProfileDetail(props) {
                     </TableRow>
                     <TableRow>
                       <TableCell>Religion:</TableCell>
-                      <TableCell align="right">{userData.religion}</TableCell>
+                      <TableCell align="right">{userData.religion_name}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell>Present Address:</TableCell>
@@ -152,7 +182,7 @@ function ProfileDetail(props) {
             </Grid>
             <Grid item md={4} sm={4} xs={4}>
               <Popup title="Profile update" openPopup={openPopup} setOpenPopup={setOpenPopup}>
-                <ProfileForm userId={userData.id}/>
+                <ProfileForm addOrEdit={addOrEdit} userData={userData}/>
               </Popup>
             </Grid>
           </Grid>

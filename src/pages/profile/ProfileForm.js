@@ -31,6 +31,8 @@ var initialFValues = {
   phone: "",
   nid: "",
   passport: "",
+  password: "",
+  password2: "",
   present_address: "",
   permanent_address: "",
   birthday: new Date(),
@@ -41,21 +43,41 @@ var initialFValues = {
   education_qualification: "",
 };
 
+const duplicateUserNameCheck = (list, value, own_email)=> {
+  var check = true
+  if(list.length === 0){
+    return check
+  }else{
+    for (let i=0; i< list.length; i ++){
+        if(value === list[i].email && value !=own_email){       
+          return check = false
+        }
+      }
+    }
+    return check;
+}
+
 
 const ProfileForm = (props) => {
 
-  const [units, setUnits] = useState([]);
+  const [userList, setUserList] = useState([]);
+  const [religions, setReligions] = useState([]);
+  const [marriedStatus, setMarriedStatuses] = useState([]);
 
 
-  const { addOrEdit, recordForEdit, userId } = props;
+  const {addOrEdit, userData } = props;
 
   const validationSchema = yup.object().shape({
-    model_no: yup.string().required("Model No is required"),
-    parent_unit: yup.string().required("Parent Unit is required"),
-    category: yup.string().required("Please select a category"),
-    type: yup.string().required("Type is required"),
-    brand: yup.string().required("Brand is required"),
-    warranty_details: yup.string().required("Warranty details is required"),
+    email: yup.string().required("Email is required")
+    .test("Unique", "Email already exist.Try other.", (values) => {
+      return duplicateUserNameCheck(userList, values, userData['email'])
+    }),
+    password: yup
+    .string('Enter your password')
+    .min(8, 'Password should be of minimum 8 characters length'),
+    password2: yup
+    .string('Enter your password')
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
   });
 
   
@@ -65,23 +87,43 @@ const ProfileForm = (props) => {
   const formik = useFormik({
     initialValues: initialFValues,
     validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => {
+    onSubmit: (values, { setSubmitting }) => {
         setSubmitting(false);
-        addOrEdit(values, resetForm, setSubmitting);
+        addOrEdit(values, setSubmitting);
     },
   });
 
   useEffect(() => {
-    if (recordForEdit != null)
+    async function getReligions() {
+      const response = await fetch("/api/married/status/list");
+      const body = await response.json();
+      setReligions(body);
+    }
+    getReligions();
+    async function getMarriedStatuses() {
+      const response = await fetch("/api/religion/list");
+      const body = await response.json();
+      setMarriedStatuses(body);
+    }
+    getMarriedStatuses();
+    async function getUsers() {
+      const response = await fetch("/api/user/list");
+      const body = await response.json();
+      setUserList(body);
+    }
+    getUsers();
+
+    if (userData != null)
+      userData['password'] = '';
+      userData['password2'] = '';
       formik.setValues({
-        ...recordForEdit,
+        ...userData,
       });
-  }, [recordForEdit]);
+  }, [userData]);
 
 
   return (
     <Form onSubmit={formik.handleSubmit}>
-      <p>{userId}</p>
       <Grid container alignItems="flex-start" spacing={1}>
       <Grid item md={3} sm={4} xs={6}>
           <Controls.Input
@@ -175,7 +217,7 @@ const ProfileForm = (props) => {
               value={formik.values.married_status}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              options={units}
+              options={marriedStatus}
               error={formik.touched.married_status && Boolean(formik.errors.married_status)}
               helperText={formik.touched.married_status && formik.errors.married_status}
             />
@@ -187,7 +229,7 @@ const ProfileForm = (props) => {
               value={formik.values.religion}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              options={units}
+              options={religions}
               error={formik.touched.religion && Boolean(formik.errors.religion)}
               helperText={formik.touched.religion && formik.errors.religion}
             />
@@ -230,6 +272,32 @@ const ProfileForm = (props) => {
         </Grid>
         <Grid item md={6} sm={6} xs={12}>
           <Controls.Input
+            label="Password"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            type="password"
+            onBlur={formik.handleBlur}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <Controls.Input
+            label="Confirm Password"
+            name="password2"
+            value={formik.values.password2}
+            onChange={formik.handleChange}
+            type="password"
+            onBlur={formik.handleBlur}
+            error={formik.touched.password2 && Boolean(formik.errors.password2)}
+            helperText={formik.touched.password2 && formik.errors.password2}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <Controls.Input
             label="Present Address"
             name="present_address"
             value={formik.values.present_address}
@@ -256,22 +324,15 @@ const ProfileForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item style={{ marginTop: 10 }}>
-          <div className={classes.wrapper}>
+        <Grid item md={12} sm={12} xs={12} >
             <Controls.Button
               type="submit"
               disabled={formik.isSubmitting}
-              text="Submit"
+              text="Update"
             />
             {formik.isSubmitting && (
               <CircularProgress size={24} className={classes.buttonProgress} />
             )}
-            <Controls.Button
-              text="Reset"
-              color="default"
-              onClick={formik.resetForm}
-            />
-          </div>
         </Grid>
       </Grid>
     </Form>
