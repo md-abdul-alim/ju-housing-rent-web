@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EmergencyContact() {
   const classes = useStyles();
-  const [lineNameList, setLineNameList] = useState([]);
+  const [emergencyContactList, setEmergencyContactList] = useState([]);
   const [recordForEdit, setRecordForEdit] = useState(null);
-  const [familyMembersRecord, setFamilyMembersRecord] = useState(null);
+  const [emergencyContactsRecord, setEmergencyContactsRecord] = useState(null);
   const [openPopup, setOpenPopup] = useState(false);
 
 
@@ -79,13 +79,13 @@ export default function EmergencyContact() {
      }
   });
 
-  async function fetchFamilyMembers() {
+  async function fetchEmergencyContact() {
 
     try {
       await axios
-        .get("/api/profile/family/member/list/", AxiosHeader)
+        .get("/api/profile/emergency/contact/list/", AxiosHeader)
         .then((res) => {
-          setLineNameList(res.data);
+          setEmergencyContactList(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -95,13 +95,13 @@ export default function EmergencyContact() {
     }
   }
 
-  const postFamilyMember = async (values, setSubmitting) => {
+  const postEmergencyContact = async (values, setSubmitting) => {
 
     try {
       await axios
-        .post("/api/profile/family/member/create/", values, AxiosHeader)
+        .post("/api/profile/emergency/contact/create/", values, AxiosHeader)
         .then((resp) => {
-          setFamilyMembersRecord(resp.data);
+          setEmergencyContactsRecord(resp.data);
           setSubmitting(false);
         });
     } catch (error) {
@@ -109,13 +109,13 @@ export default function EmergencyContact() {
     }
   };
 
-  const updateFamilyMember = async (values, setSubmitting) => {
+  const updateEmergencyContact = async (values, setSubmitting) => {
 
     try {
       await axios
-        .put(`/api/profile/family/member/update/`, values, AxiosHeader)
+        .put(`/api/profile/emergency/contact/update/`, values, AxiosHeader)
         .then((resp) => {
-          setFamilyMembersRecord(resp.data);
+          setEmergencyContactsRecord(resp.data);
           setSubmitting(false);
         });
     } catch (error) {
@@ -125,14 +125,14 @@ export default function EmergencyContact() {
 
   const deleteFamilyMember = async (values) => {
     await axios
-      .delete(`/api/profile/family/member/delete/`, {
+      .delete(`/api/profile/emergency/contact/delete/`, {
         params: { member: values.id },
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("access_token")}`
         },
       }) 
       .then((resp) => {
-        setFamilyMembersRecord(resp.data);
+        setEmergencyContactsRecord(resp.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -141,8 +141,8 @@ export default function EmergencyContact() {
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
-    fetchFamilyMembers();
-  }, [familyMembersRecord]);
+    fetchEmergencyContact();
+  }, [emergencyContactsRecord]);
 
   const openInPopup = (item) => {
     setRecordForEdit(item);
@@ -168,14 +168,6 @@ export default function EmergencyContact() {
       },
     },
     {
-      name: "age",
-      label: "Age",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
       name: "phone",
       label: "Phone",
       options: {
@@ -192,8 +184,8 @@ export default function EmergencyContact() {
       },
     },
     {
-      name: "occupation",
-      label: "Occupation",
+      name: "address",
+      label: "Address",
       options: {
         filter: true,
         sort: true,
@@ -238,8 +230,8 @@ export default function EmergencyContact() {
   ];
 
   const addOrEdit = (familyMember, resetForm, setSubmitting) => {
-    if (familyMember.id === 0) postFamilyMember(familyMember, setSubmitting);
-    else updateFamilyMember(familyMember, setSubmitting);
+    if (familyMember.id === 0) postEmergencyContact(familyMember, setSubmitting);
+    else updateEmergencyContact(familyMember, setSubmitting);
     resetForm();
     setRecordForEdit(null);
     setOpenPopup(false);
@@ -277,7 +269,7 @@ export default function EmergencyContact() {
     <div>
       <MUIDataTable
         title={"Emergency Contacts"}
-        data={lineNameList}
+        data={emergencyContactList}
         columns={columns}
         options={options}
         className={classes.pageContent}

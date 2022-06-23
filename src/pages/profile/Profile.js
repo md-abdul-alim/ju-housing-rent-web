@@ -4,8 +4,8 @@ import ProfileUpdateForm from "./ProfileUpdateForm";
 import ProfileDetail from './ProfileDetail'
 import FamilyMember from "./FamilyMember";
 import EmergencyContact from "./EmergencyContact";
-import HomeCleaner from "./HomeCleaner";
-import HomeDriver from "./HomeDriver";
+import Cleaner from "./Cleaner";
+import Driver from "./Driver";
 import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
 
 function Profile() {
@@ -24,10 +24,10 @@ function Profile() {
                     <EmergencyContact/>
                   </Grid>
                   <Grid item md={6} sm={6} xs={12}>
-                    <HomeCleaner/>
+                    <Cleaner/>
                   </Grid>
                   <Grid item md={6} sm={6} xs={12}>
-                    <HomeDriver/>
+                    <Driver/>
                   </Grid>
                 </Grid>
             </Grid>

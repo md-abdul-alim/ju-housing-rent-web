@@ -26,21 +26,26 @@ const style = makeStyles({
 var initialValues = {
   id: 0,
   name: "x",
+  age: 0,
   phone: "324",
-  relation: "fs",
-  address: "ds",
+  nid: 0,
+  present_address: "ds",
+  permanent_address: "ds",
 };
 
 
 
-const EmergencyContactForm = (props) => {
+const OtherForm = (props) => {
 
   const { addOrEdit, recordForEdit } = props;
 
   const validationSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
+    age: yup.string().required("Age is required"),
     phone: yup.string().required("Phone is required"),
-    relation: yup.string().required("Relation is required"),
+    nid: yup.string().required("Nid is required"),
+    present_address: yup.string().required("Present Address is required"),
+    permanent_address: yup.string().required("Permanent Address is required"),
   });
 
   const classes = style();
@@ -81,6 +86,17 @@ const EmergencyContactForm = (props) => {
         </Grid>
         <Grid item md={6} sm={6} xs={12}>
           <Controls.Input
+            label="Age"
+            name="age"
+            value={formik.values.age}
+            onChange={formik.handleChange}
+            error={formik.touched.age && Boolean(formik.errors.age)}
+            helperText={formik.touched.age && formik.errors.age}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <Controls.Input
             label="Phone"
             name="phone"
             value={formik.values.phone}
@@ -92,23 +108,34 @@ const EmergencyContactForm = (props) => {
         </Grid>
         <Grid item md={6} sm={6} xs={12}>
           <Controls.Input
-            label="Relation"
-            name="relation"
-            value={formik.values.relation}
+            label="Nid"
+            name="nid"
+            value={formik.values.nid}
             onChange={formik.handleChange}
-            error={formik.touched.relation && Boolean(formik.errors.relation)}
-            helperText={formik.touched.relation && formik.errors.relation}
+            error={formik.touched.nid && Boolean(formik.errors.nid)}
+            helperText={formik.touched.nid && formik.errors.nid}
             fullWidth
           />
         </Grid>
         <Grid item md={6} sm={6} xs={12}>
           <Controls.Input
-            label="Address"
-            name="address"
-            value={formik.values.address}
+            label="Present Address"
+            name="present_address"
+            value={formik.values.present_address}
             onChange={formik.handleChange}
-            error={formik.touched.address && Boolean(formik.errors.address)}
-            helperText={formik.touched.address && formik.errors.address}
+            error={formik.touched.present_address && Boolean(formik.errors.present_address)}
+            helperText={formik.touched.present_address && formik.errors.present_address}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <Controls.Input
+            label="Permanent Address"
+            name="permanent_address"
+            value={formik.values.permanent_address}
+            onChange={formik.handleChange}
+            error={formik.touched.permanent_address && Boolean(formik.errors.permanent_address)}
+            helperText={formik.touched.permanent_address && formik.errors.permanent_address}
             fullWidth
           />
         </Grid>
@@ -137,5 +164,5 @@ const EmergencyContactForm = (props) => {
 };
 
 export {
-  EmergencyContactForm,
+  OtherForm,
 }
