@@ -10,6 +10,8 @@ import Notification from "../../components/SnackBar/Notification";
 import { makeStyles, Tooltip } from "@material-ui/core";
 import {EmergencyContactForm} from "./EmergencyContactForm";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -203,25 +205,31 @@ export default function EmergencyContact() {
           });
           return (
             <>
-              <Tooltip title={"Update"}>
-                <IconButton
-                  color="primary"
-                  onClick={() => {
-                    openInPopup(item);
-                  }}
-                >
-                  <EditIcon fontSize="default" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={"Delete"}>
-                <IconButton
-                  onClick={() => {
-                      deleteFamilyMember(item);
-                  }}
-                >
-                  <DeleteIcon fontSize="default" style={{color: "red"}} />
-                </IconButton>
-              </Tooltip>
+              <Grid container>
+                <Grid item md={6} sm={6} xs={6}>
+                  <Tooltip title={"Update"}>
+                    <IconButton
+                      color="primary"
+                      onClick={() => {
+                        openInPopup(item);
+                      }}
+                    >
+                      <EditIcon fontSize="default" />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+                <Grid item md={6} sm={6} xs={6}>
+                  <Tooltip title={"Delete"}>
+                    <IconButton
+                      onClick={() => {
+                          deleteFamilyMember(item);
+                      }}
+                    >
+                      <DeleteIcon fontSize="default" style={{color: "red"}} />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              </Grid>
             </>
           );
         },

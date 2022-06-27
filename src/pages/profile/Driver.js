@@ -12,6 +12,7 @@ import { makeStyles, Tooltip } from "@material-ui/core";
 import {OtherForm} from "./OtherForm";
 import OtherDetail from "./OtherDetail";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -203,34 +204,42 @@ export default function Driver() {
           });
           return (
             <>
-              <Tooltip title={"Update"}>
-                <IconButton
-                  color="primary"
-                  onClick={() => {
-                    openInPopup(item);
-                  }}
-                >
-                  <EditIcon fontSize="default" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={"Detail"}>
-                <IconButton
-                  onClick={() => {
-                    openInPopup2(item);
-                  }}
-                >
-                  <DetailsIcon fontSize="default"/>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={"Delete"}>
-                <IconButton
-                  onClick={() => {
-                    deleteDriver(item);
-                  }}
-                >
-                  <DeleteIcon fontSize="default" style={{color: "red"}} />
-                </IconButton>
-              </Tooltip>
+              <Grid container>
+                <Grid item md={4} sm={4} xs={4}>
+                  <Tooltip title={"Update"}>
+                    <IconButton
+                      color="primary"
+                      onClick={() => {
+                        openInPopup(item);
+                      }}
+                    >
+                      <EditIcon fontSize="default" />
+                    </IconButton>
+                  </Tooltip> 
+                </Grid>
+                <Grid item md={4} sm={4} xs={4}>
+                  <Tooltip title={"Detail"}>
+                    <IconButton
+                      onClick={() => {
+                        openInPopup2(item);
+                      }}
+                    >
+                      <DetailsIcon fontSize="default"/>
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+                <Grid item md={4} sm={4} xs={4}>
+                  <Tooltip title={"Delete"}>
+                    <IconButton
+                      onClick={() => {
+                        deleteDriver(item);
+                      }}
+                    >
+                      <DeleteIcon fontSize="default" style={{color: "red"}} />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              </Grid>
             </>
           );
         },
