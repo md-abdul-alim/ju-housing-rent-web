@@ -3,7 +3,9 @@ import { Drawer, IconButton, List } from "@material-ui/core";
 import {
   Home as HomeIcon,
   ArrowBack as ArrowBackIcon,
-  Details as DetailsIcon
+  Person as PersonIcon,
+  Dashboard as DashboardIcon,
+  Apartment as ApartmentIcon,
 } from "@material-ui/icons";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
@@ -23,12 +25,18 @@ import {
 } from "../../context/LayoutContext";
 
 const structure = [
-  { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
+  { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <DashboardIcon color='secondary'/> },
   {
     id: 1,
     label: "Profile",
     link: "/app/profile",
-    icon: <DetailsIcon />,
+    icon: <PersonIcon color='primary' />,
+  },
+  {
+    id: 2,
+    label: "To Let",
+    link: "/app/tolet",
+    icon: <ApartmentIcon/>,
   },
 ];
 

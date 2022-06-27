@@ -116,10 +116,6 @@ function ProfileDetail(props) {
                     <TableCell align="right">{userData.passport}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Married Status:</TableCell>
-                    <TableCell align="right">{userData.married_status_name}</TableCell>
-                  </TableRow>
-                  <TableRow>
                     <TableCell>Occupation:</TableCell>
                     <TableCell align="right">{userData.occupation}</TableCell>
                   </TableRow>
@@ -136,10 +132,6 @@ function ProfileDetail(props) {
                     <TableRow>
                       <TableCell>Education Qualification:</TableCell>
                       <TableCell align="right">{userData.education_qualification}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Religion:</TableCell>
-                      <TableCell align="right">{userData.religion_name}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell>Present Address:</TableCell>

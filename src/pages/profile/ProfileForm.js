@@ -49,7 +49,7 @@ const duplicateUserNameCheck = (list, value, own_email)=> {
     return check
   }else{
     for (let i=0; i< list.length; i ++){
-        if(value === list[i].email && value !=own_email){       
+        if(value === list[i].email && value !==own_email){       
           return check = false
         }
       }

@@ -21,6 +21,7 @@ import Icons from "../../pages/icons";
 import Charts from "../../pages/charts";
 import Profile from "../../pages/profile/Profile";
 import ProfileDetail from "../../pages/profile/ProfileDetail";
+import ToLet from "../../pages/tolet/ToLet"
 
 // context
 import { useLayoutState } from "../../context/LayoutContext";
@@ -50,6 +51,7 @@ function Layout(props) {
             <Route path="/app/notifications" component={Notifications} />
             <Route path="/app/profile" component={Profile} />
             <Route path="/app/pro/detail" component={ProfileDetail} />
+            <Route path="/app/tolet" component={ToLet} />
             <Route
               exact
               path="/app/ui"
