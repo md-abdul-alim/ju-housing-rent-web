@@ -10,6 +10,7 @@ import {
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 // styles
 import useStyles from "./styles";
@@ -37,6 +38,12 @@ const structure = [
     label: "To Let",
     link: "/app/tolet",
     icon: <ApartmentIcon/>,
+  },
+  {
+    id: 3,
+    label: "Check in out",
+    link: "/app/check/in/out",
+    icon: <CompareArrowsIcon style={{color: 'purple'}}/>,
   },
 ];
 

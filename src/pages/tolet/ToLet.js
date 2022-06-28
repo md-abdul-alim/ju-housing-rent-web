@@ -10,12 +10,15 @@ import axios from "axios";
 import IconButton from "@material-ui/core/IconButton";
 import Popup from "../../components/Controls/Popup";
 import Notification from "../../components/SnackBar/Notification";
-import { makeStyles, Tooltip } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import ToLetDetail from "./ToLetDetail";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { ToLetForm } from "./ToLetForm";
 import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
 import Grid from "@material-ui/core/Grid";
+
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -86,6 +89,20 @@ export default function ToLet() {
       "fontWeightMedium": 500
      }
   });
+
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      // color: theme.palette.common.black,
+      color: 'red',
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      // backgroundColor: theme.palette.common.black,
+      color: 'white',
+      backgroundColor: 'rgba(139,0,0, 0.87)',
+    },
+  }));
 
   async function fetchToLet() {
 
@@ -197,6 +214,14 @@ export default function ToLet() {
       },
     },
     {
+      name: "code",
+      label: "Code",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
       name: "type",
       label: "Type",
       options: {
@@ -245,8 +270,32 @@ export default function ToLet() {
       },
     },
     {
-      name: "renter_name",
-      label: "Renter",
+      name: "check_in_renter_name",
+      label: "Check in Renter",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "check_in",
+      label: "Check in Date",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "check_out_renter_name",
+      label: "Check out Renter",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "check_out",
+      label: "Check out Date",
       options: {
         filter: true,
         sort: true,
@@ -267,7 +316,7 @@ export default function ToLet() {
             <>
               <Grid container spacing={1}>
                 <Grid item md={3} sm={6} xs={6}>
-                  <Tooltip title={"Update"}>
+                  <Tooltip title={"Update"} placement="bottom" arrow>
                     <IconButton
                       color="primary"
                       onClick={() => {
@@ -279,7 +328,7 @@ export default function ToLet() {
                   </Tooltip>
                 </Grid>
                 <Grid item md={3} sm={6} xs={6}>
-                  <Tooltip title={"Status"}>
+                  <Tooltip title={"Status"} placement="bottom" arrow>
                     <IconButton
                       onClick={() => {
                         updateToLetStatus(item);
@@ -292,7 +341,7 @@ export default function ToLet() {
                   </Tooltip>
                 </Grid>
                 <Grid item md={3} sm={6} xs={6}>
-                  <Tooltip title={"Detail"}>
+                  <Tooltip title={"Detail"} placement="bottom" arrow>
                     <IconButton
                       onClick={() => {
                         openInPopup2(item);
@@ -303,7 +352,7 @@ export default function ToLet() {
                   </Tooltip>
                 </Grid>
                 <Grid item md={3} sm={6} xs={6}>
-                  <Tooltip title={"Delete"}>
+                  <BootstrapTooltip title={"Delete"} placement="bottom" disableFocusListener disableTouchListener arrow>
                     <IconButton
                       onClick={() => {
                         deleteToLet(item);
@@ -311,7 +360,7 @@ export default function ToLet() {
                     >
                       <DeleteIcon fontSize="default" style={{color: "red"}} />
                     </IconButton>
-                  </Tooltip>
+                  </BootstrapTooltip>
                 </Grid>
               </Grid>
             </>
