@@ -27,11 +27,26 @@ var initialValues = {
   id: 0,
   name: "x",
   type: "d",
+  to_let_from: new Date(),
   square_feet: 12,
   bedrooms: 2,
   rent: 2000,
+  check_in_permission_nid: '',
   address: "d",
   description: "s",
+};
+
+const verifyNid = (renterNid, value)=> {
+  if(renterNid.length === 0){
+    return false;
+  }else{
+    for (let i=0; i< renterNid.length; i ++){
+      if(parseInt(renterNid[i].nid) === parseInt(value)){
+        return true;
+      }
+    }
+    return false;
+  }
 };
 
 
@@ -39,6 +54,8 @@ var initialValues = {
 const ToLetForm = (props) => {
 
   const { addOrEdit, recordForEdit } = props;
+  const [renterNid, setRenterNid] = useState([]);
+
 
   const validationSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
@@ -47,6 +64,16 @@ const ToLetForm = (props) => {
     bedrooms: yup.string().required("Bedroom is required"),
     rent: yup.string().required("Rent is required"),
     address: yup.string().required("Address is required"),
+    check_in_permission_nid: yup
+    .number()
+    .integer()
+    .nullable()
+    .test("Not found", "NID not found.", (value) => {
+      if(parseInt(value) > 0){
+        return verifyNid(renterNid, value)
+      }
+      return true
+    }),
   });
 
   const classes = style();
@@ -63,6 +90,13 @@ const ToLetForm = (props) => {
 
 
   useEffect(() => {
+    async function getRenterNid() {
+      const response = await fetch("/api/renter/nid/list/");
+      const body = await response.json();
+      setRenterNid(body);
+    }
+    getRenterNid();
+
     if (recordForEdit != null)
       formik.setValues({
         ...recordForEdit,
@@ -73,7 +107,7 @@ const ToLetForm = (props) => {
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Grid container alignItems="flex-start" spacing={2}>
-        <Grid item md={6} sm={6} xs={12}>
+        <Grid item md={4} sm={6} xs={12}>
           <Controls.Input
             label="Name"
             name="name"
@@ -85,7 +119,7 @@ const ToLetForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={6} sm={6} xs={12}>
+        <Grid item md={4} sm={6} xs={12}>
           <Controls.Input
             label="Type"
             name="type"
@@ -97,6 +131,22 @@ const ToLetForm = (props) => {
           />
         </Grid>
         <Grid item md={4} sm={6} xs={12}>
+            <Controls.DatePicker
+              label="To Let Date"
+              name="to_let_from"
+              value={formik.values.to_let_from}
+              minDate={new Date()}
+              // minDate={new Date().setDate(new Date().getDate() - 7)}
+              maxDate={new Date().setDate(new Date().getDate() + 90)}
+              placeholder="To Let Date"
+              onChange={value => {
+                formik.setFieldValue("to_let_from", value)
+              }}
+              onBlur={formik.handleBlur}
+              fullWidth
+            />
+          </Grid>
+        <Grid item md={3} sm={6} xs={12}>
           <Controls.Input
             label="Square Feet"
             name="square_feet"
@@ -107,7 +157,7 @@ const ToLetForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={4} sm={6} xs={12}>
+        <Grid item md={3} sm={6} xs={12}>
           <Controls.Input
             label="Bedrooms"
             name="bedrooms"
@@ -118,7 +168,7 @@ const ToLetForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={4} sm={6} xs={12}>
+        <Grid item md={3} sm={6} xs={12}>
           <Controls.Input
             label="Rent"
             name="rent"
@@ -126,6 +176,18 @@ const ToLetForm = (props) => {
             onChange={formik.handleChange}
             error={formik.touched.rent && Boolean(formik.errors.rent)}
             helperText={formik.touched.rent && formik.errors.rent}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={3} sm={6} xs={12}>
+          <Controls.Input
+            label="Check in Renter NID"
+            name="check_in_permission_nid"
+            value={formik.values.check_in_permission_nid}
+            onChange={formik.handleChange}
+            type='number'
+            error={formik.touched.check_in_permission_nid && Boolean(formik.errors.check_in_permission_nid)}
+            helperText={formik.touched.check_in_permission_nid && formik.errors.check_in_permission_nid}
             fullWidth
           />
         </Grid>

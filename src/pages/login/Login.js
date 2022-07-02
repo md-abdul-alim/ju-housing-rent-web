@@ -151,7 +151,7 @@ function Login(props) {
           localStorage.setItem('first_name', res.data.first_name)
           localStorage.setItem('last_name', res.data.last_name)
           localStorage.setItem('user_type', res.data.user_type)
-          localStorage.setItem('account_complete_status', res.data.account_complete_status)
+          localStorage.setItem('nid', res.data.nid)
           setError(null)
           dispatch({ type: 'LOGIN_SUCCESS', payload: res.data })
           setIsLoading(false);
@@ -205,13 +205,13 @@ function Login(props) {
 
   useEffect(() => {
     async function getUsers() {
-      const response = await fetch("/api/user/list");
+      const response = await fetch("/api/user/list/");
       const body = await response.json();
       setUserList(body);
     }
     getUsers();
     async function getGroups() {
-      const response = await fetch("/api/group/list");
+      const response = await fetch("/api/group/list/");
       const body = await response.json();
       setGroupList(body);
     }

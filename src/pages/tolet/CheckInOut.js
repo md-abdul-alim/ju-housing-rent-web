@@ -13,14 +13,11 @@ import Notification from "../../components/SnackBar/Notification";
 import { makeStyles } from "@material-ui/core";
 import ToLetDetail from "./ToLetDetail";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import { ToLetForm } from "./ToLetForm";
 import { CheckInForm } from "./CheckInForm";
-
 import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
 import Grid from "@material-ui/core/Grid";
 
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import { styled } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ToLet() {
+export default function CheckInOut() {
   const classes = useStyles();
 
   const user_type = localStorage.getItem("user_type")
@@ -46,8 +43,7 @@ export default function ToLet() {
   const [recordForEdit, setRecordForEdit] = useState(null);
   const [toLetRecord, setToLetRecord] = useState(null);
   const [openPopup, setOpenPopup] = useState(false);
-  const [openPopup1, setOpenPopup1] = useState(false);
-  const [openPopup2, setOpenPopup2] = useState(false);
+  const [openPopup1, setOpenPopup2] = useState(false);
 
 
   const AxiosHeader = {
@@ -152,13 +148,14 @@ export default function ToLet() {
     }
   };
 
-  const updateToLetStatus = async (values) => {
+  const updateToLetStatus = async (values, setSubmitting) => {
 
     try {
       await axios
         .put(`/api/to/let/status/update/${values.id}/`, values, AxiosHeader)
         .then((resp) => {
           setToLetRecord(resp.data);
+          setSubmitting(false);
         });
     } catch (error) {
       console.log(error);
@@ -179,21 +176,7 @@ export default function ToLet() {
       .catch(function (error) {
         console.log(error);
       });
-  };
-
-  const postCheckIn = async (values, setSubmitting) => {
-
-    try {
-      await axios
-        .post("/api/check/in/create/", values, AxiosHeader)
-        .then((resp) => {
-          setToLetRecord(resp.data);
-          setSubmitting(false);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
@@ -203,11 +186,6 @@ export default function ToLet() {
   const openInPopup = (item) => {
     setRecordForEdit(item);
     setOpenPopup(true);
-  };
-
-  const openInPopup1 = (item) => {
-    setRecordForEdit(item);
-    setOpenPopup1(true);
   };
 
   const openInPopup2 = (item) => {
@@ -292,14 +270,6 @@ export default function ToLet() {
       },
     },
     {
-      name: "to_let_date",
-      label: "To Let Date",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
       name: "check_in_renter_name",
       label: "Check in Renter",
       options: {
@@ -342,12 +312,11 @@ export default function ToLet() {
               return (item = toLet);
           });
           let to_let = JSON.parse(JSON.stringify(item))
-          // console.log(to_let['to_let_from'].split('-'), new Date())
           return (
             <>
               <Grid container spacing={1}>
                 <Grid item md={3} sm={6} xs={6}>
-                  <Tooltip title={"Update Unit"} placement="bottom" arrow>
+                  <Tooltip title={"Update"} placement="bottom" arrow>
                     <IconButton
                       color="primary"
                       onClick={() => {
@@ -362,27 +331,8 @@ export default function ToLet() {
                   <Tooltip title={"Status"} placement="bottom" arrow>
                     <IconButton
                       onClick={() => {
-                        if(to_let['to_let_date'] === 'None'){
-                          alert("Please enter To Let Date")
-                        }else{
-                          if(parseInt(to_let['to_let_from'].split('-')[0]) >= new Date().getFullYear()){
-                              if(parseInt(to_let['to_let_from'].split('-')[1]) === new Date().getMonth() + 1){
-                                if(parseInt(to_let['to_let_from'].split('-')[2].split('T')[0]) >= new Date().getDate()){
-                                  updateToLetStatus(item);
-                                }else{
-                                  alert("To Let Date must be greater than today")
-                                }
-                              }else if(parseInt(to_let['to_let_from'].split('-')[1]) > new Date().getMonth() + 1){
-                                updateToLetStatus(item);
-                              }else{
-                                alert("To Let Date must be greater than today")
-                              }
-                          }else{
-                            alert("To Let Date must be greater than today")
-                          }
-                        }
-                      }
-                    }
+                        updateToLetStatus(item);
+                      }}
                     >
                       {
                         to_let['status'] === 'True' ? <CheckIcon fontSize="default" style={{color: "green"}} /> : <CloseIcon fontSize="default" style={{color: "red"}} />
@@ -394,7 +344,7 @@ export default function ToLet() {
                   <Tooltip title={"Detail"} placement="bottom" arrow>
                     <IconButton
                       onClick={() => {
-                        openInPopup1(item);
+                        openInPopup2(item);
                       }}
                     >
                       <DetailsIcon fontSize="default" style={{color: "violet"}}/>
@@ -486,14 +436,6 @@ export default function ToLet() {
       },
     },
     {
-      name: "to_let_date",
-      label: "To Let Date",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
       name: "Actions",
       options: {
         filter: false,
@@ -506,26 +448,14 @@ export default function ToLet() {
           return (
             <>
               <Grid container>
-                <Grid item md={6} sm={6} xs={6}>
+                <Grid item md={12} sm={12} xs={12}>
                   <Tooltip title={"Detail"}>
                     <IconButton
-                      onClick={() => {
-                        openInPopup1(item);
-                      }}
-                    >
-                      <DetailsIcon fontSize="default"  style={{color: "violet"}}/>
-                    </IconButton>
-                  </Tooltip>
-                </Grid>
-                <Grid item md={6} sm={6} xs={6}>
-                  <Tooltip title={"check in"} placement="bottom" arrow>
-                    <IconButton
-                      color="primary"
                       onClick={() => {
                         openInPopup2(item);
                       }}
                     >
-                      <CompareArrowsIcon style={{color: 'purple'}} />
+                      <DetailsIcon fontSize="default"  style={{color: "violet"}}/>
                     </IconButton>
                   </Tooltip>
                 </Grid>
@@ -556,18 +486,6 @@ export default function ToLet() {
     });
   };
 
-  const addOrEditCheckIn = (toLet, resetForm, setSubmitting) => {
-    if (toLet.id === 0) postCheckIn(toLet, setSubmitting);
-    resetForm();
-    setRecordForEdit(null);
-    setOpenPopup2(false);
-    setNotify({
-      isOpen: true,
-      message: "Submitted Successfully",
-      type: "success",
-    });
-  };
-
   const options = {
     filterType: "dropdown",
     selectableRows: "none",
@@ -576,7 +494,7 @@ export default function ToLet() {
       return (
         <>
         {
-          user_type === 'Owner' ? <Tooltip title={"Add New Unit"}>
+          user_type === 'Owner' ? <Tooltip title={"Add New"}>
           <IconButton className={classes.iconButtonColor}
             onClick={() => {
               setOpenPopup(true);
@@ -596,33 +514,26 @@ export default function ToLet() {
 
   return (
     <MuiThemeProvider theme={getMuiTheme()}>
-      <BreadCrumb routeSegments={[{ name: "To Let" }]} />
+      <BreadCrumb routeSegments={[{ name: "Check In" }]} />
     <div>
       <MUIDataTable
-        title={"To Lets"}
+        title={"Check In"}
         data={toLetList}
         columns={columns}
         options={options}
         className={classes.pageContent}
       />
       <Popup
-        title="To Let Form"
+        title="Check In Form"
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
-        <ToLetForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+        <CheckInForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Popup>
       <Popup
-        title="Check in Form"
-        openPopup={openPopup2}
-        setOpenPopup={setOpenPopup2}
-      >
-        <CheckInForm recordForEdit={recordForEdit} addOrEditCheckIn={addOrEditCheckIn} />
-      </Popup>
-      <Popup
-        title="To Let Detail"
+        title="Check In Detail"
         openPopup={openPopup1}
-        setOpenPopup={setOpenPopup1}
+        setOpenPopup={setOpenPopup2}
       >
         <ToLetDetail record={recordForEdit} />
       </Popup>
