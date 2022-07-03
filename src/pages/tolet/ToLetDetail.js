@@ -57,6 +57,26 @@ function ToLetDetail(props) {
                     <TableCell>Description:</TableCell>
                     <TableCell align="right">{record.description}</TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell>Check in Renter:</TableCell>
+                    <TableCell align="right">{record.check_in_renter_name}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Check in Date:</TableCell>
+                    <TableCell align="right">{record.check_in}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Check out Renter:</TableCell>
+                    <TableCell align="right">{record.check_out_renter_name}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Check out Date:</TableCell>
+                    <TableCell align="right">{record.check_out}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Description:</TableCell>
+                    <TableCell align="right">{record.description}</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Grid>

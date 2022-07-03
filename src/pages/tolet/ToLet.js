@@ -21,6 +21,8 @@ import Grid from "@material-ui/core/Grid";
 
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { styled } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -195,6 +197,36 @@ export default function ToLet() {
     }
   };
 
+
+  const acceptCheckIn = async (values) => {
+
+    try {
+      await axios
+        .put(`/api/check/accept/${values.code}/`, values, AxiosHeader)
+        .then((resp) => {
+          setToLetRecord(resp.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const rejectCheckIn = async (values) => {
+    await axios
+      .delete(`/api/check/reject/`, {
+        params: { id: values.code},
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+        },
+      }) 
+      .then((resp) => {
+        setToLetRecord(resp.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     fetchToLet();
@@ -216,6 +248,147 @@ export default function ToLet() {
   };
 
   let columns = ''
+
+  const admin_columns = [
+    {
+      name: "id",
+      label: "ID",
+      options: {
+        filter: false,
+        sort: false,
+        display: false,
+      },
+    },
+    {
+      name: "owner_name",
+      label: "Owner Name",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "owner_email",
+      label: "Owner Email",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "owner_phone",
+      label: "Owner Phone",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "name",
+      label: "Unit Name",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "code",
+      label: "Code",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "type",
+      label: "Type",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "square_feet",
+      label: "Square Feet",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "bedrooms",
+      label: "Bedrooms",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "phone",
+      label: "Phone",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "rent",
+      label: "Rent",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "to_let_date",
+      label: "To Let Date",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "Actions",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          let item;
+          tableMeta.tableData.forEach(function (toLet) {
+            if (toLet.id === tableMeta.rowData[0])
+              return (item = toLet);
+          });
+          let to_let = JSON.parse(JSON.stringify(item))
+          return (
+            <>
+              <Grid container spacing={1}>
+                <Grid item md={6} sm={6} xs={6}>
+                  <Tooltip title={"Detail"} placement="bottom" arrow>
+                    <IconButton
+                      onClick={() => {
+                        openInPopup1(item);
+                      }}
+                    >
+                      <DetailsIcon fontSize="default" style={{color: "violet"}}/>
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+                <Grid item md={6} sm={6} xs={6}>
+                  <Tooltip title={"Status"} placement="bottom" arrow>
+                    <IconButton
+                    >
+                      {
+                        to_let['status'] === 'True' ? <CheckIcon fontSize="default" style={{color: "green"}} /> : <CloseIcon fontSize="default" style={{color: "red"}} />
+                      }
+                    </IconButton>
+                  </Tooltip>
+                  </Grid>
+              </Grid>
+            </>
+          );
+        },
+      },
+    },
+  ];
 
   const owner_columns = [
     {
@@ -268,6 +441,14 @@ export default function ToLet() {
       },
     },
     {
+      name: "phone",
+      label: "Phone",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
       name: "rent",
       label: "Rent",
       options: {
@@ -284,14 +465,6 @@ export default function ToLet() {
       },
     },
     {
-      name: "description",
-      label: "Description",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
       name: "to_let_date",
       label: "To Let Date",
       options: {
@@ -300,35 +473,54 @@ export default function ToLet() {
       },
     },
     {
-      name: "check_in_renter_name",
-      label: "Check in Renter",
+      name: "Check In Request",
       options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "check_in",
-      label: "Check in Date",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "check_out_renter_name",
-      label: "Check out Renter",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "check_out",
-      label: "Check out Date",
-      options: {
-        filter: true,
-        sort: true,
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          let item;
+          tableMeta.tableData.forEach(function (toLet) {
+            if (toLet.id === tableMeta.rowData[0])
+              return (item = toLet);
+          });
+          let to_let = JSON.parse(JSON.stringify(item))
+          return (
+            <>
+            {
+              to_let['check_in_status'] === 'True' ? <Grid container spacing={1}>
+              <Grid item md={6} sm={6} xs={6}>
+                <Tooltip title={"Accept"} placement="bottom" arrow>
+                  <IconButton
+                      onClick={() => {
+                        if(to_let['check_out_status'] === 'True'){
+                          acceptCheckIn(item);
+                        }else{
+                          alert("Be sure your current renter checked out.")
+                        }
+                      }
+                    }
+                    >
+                    <CheckCircleIcon fontSize="default" style={{color: "green"}} />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid item md={6} sm={6} xs={6}>
+                <Tooltip title={"Reject"} placement="bottom" arrow>
+                  <IconButton
+                      onClick={() => {
+                        rejectCheckIn(item);
+                      }
+                    }
+                    >
+                    <CancelIcon fontSize="default" style={{color: "red"}} />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+            </Grid> : <p>No Request</p>
+            }
+            
+            </>
+          );
+        },
       },
     },
     {
@@ -368,12 +560,12 @@ export default function ToLet() {
                           if(parseInt(to_let['to_let_from'].split('-')[0]) >= new Date().getFullYear()){
                               if(parseInt(to_let['to_let_from'].split('-')[1]) === new Date().getMonth() + 1){
                                 if(parseInt(to_let['to_let_from'].split('-')[2].split('T')[0]) >= new Date().getDate()){
-                                  updateToLetStatus(item);
+                                  to_let['check_in_status'] === 'True' ? alert("A renter is on process. Please accept or reject first for new To Let.") : updateToLetStatus(item)
                                 }else{
                                   alert("To Let Date must be greater than today")
                                 }
                               }else if(parseInt(to_let['to_let_from'].split('-')[1]) > new Date().getMonth() + 1){
-                                updateToLetStatus(item);
+                                to_let['check_in_status'] === 'True' ? alert("A renter is on process. Please accept or reject first for new To Let.") : updateToLetStatus(item)
                               }else{
                                 alert("To Let Date must be greater than today")
                               }
@@ -470,6 +662,14 @@ export default function ToLet() {
       },
     },
     {
+      name: "phone",
+      label: "Phone",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
       name: "address",
       label: "Address",
       options: {
@@ -539,8 +739,11 @@ export default function ToLet() {
 
   if(user_type === 'Owner'){
     columns = owner_columns
-  }else{
+  }else if(user_type === 'Renter'){
     columns = renter_columns
+  }
+  else{
+    columns = admin_columns
   }
 
   const addOrEdit = (toLet, resetForm, setSubmitting) => {

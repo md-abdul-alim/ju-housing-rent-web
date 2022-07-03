@@ -134,7 +134,9 @@ export default function Header(props) {
           )}
         </IconButton>
         <Typography variant="h6" weight="medium" className={classes.logotype}>
-          Machine Maintenance
+          {
+            userType === 'Owner' ? "Owner Dashboard" : userType === 'Renter' ? "Renter Dashboard" : userType === 'Admin' ? "Admin Dashboard" : "Anonymous"
+          }
         </Typography>
         <div className={classes.grow} />
         <IconButton

@@ -30,6 +30,7 @@ var initialValues = {
   to_let_from: new Date(),
   square_feet: 12,
   bedrooms: 2,
+  phone: "",
   rent: 2000,
   check_in_permission_nid: '',
   address: "d",
@@ -63,6 +64,9 @@ const ToLetForm = (props) => {
     square_feet: yup.string().required("Square Feet is required"),
     bedrooms: yup.string().required("Bedroom is required"),
     rent: yup.string().required("Rent is required"),
+    phone: yup
+    .string().required("Phone is required")
+    .nullable(),
     address: yup.string().required("Address is required"),
     check_in_permission_nid: yup
     .number()
@@ -107,7 +111,7 @@ const ToLetForm = (props) => {
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Grid container alignItems="flex-start" spacing={2}>
-        <Grid item md={4} sm={6} xs={12}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="Name"
             name="name"
@@ -119,7 +123,7 @@ const ToLetForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={4} sm={6} xs={12}>
+        <Grid item md={3} sm={4} xs={12}>
           <Controls.Input
             label="Type"
             name="type"
@@ -130,22 +134,33 @@ const ToLetForm = (props) => {
             fullWidth
           />
         </Grid>
-        <Grid item md={4} sm={6} xs={12}>
-            <Controls.DatePicker
-              label="To Let Date"
-              name="to_let_from"
-              value={formik.values.to_let_from}
-              minDate={new Date()}
-              // minDate={new Date().setDate(new Date().getDate() - 7)}
-              maxDate={new Date().setDate(new Date().getDate() + 90)}
-              placeholder="To Let Date"
-              onChange={value => {
-                formik.setFieldValue("to_let_from", value)
-              }}
-              onBlur={formik.handleBlur}
-              fullWidth
-            />
-          </Grid>
+        <Grid item md={3} sm={4} xs={12}>
+          <Controls.DatePicker
+            label="To Let Date"
+            name="to_let_from"
+            value={formik.values.to_let_from}
+            minDate={new Date()}
+            // minDate={new Date().setDate(new Date().getDate() - 7)}
+            maxDate={new Date().setDate(new Date().getDate() + 90)}
+            placeholder="To Let Date"
+            onChange={value => {
+              formik.setFieldValue("to_let_from", value)
+            }}
+            onBlur={formik.handleBlur}
+            fullWidth
+          />
+        </Grid>
+        <Grid item md={3} sm={4} xs={12}>
+          <Controls.Input
+            label="Phone"
+            name="phone"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+            error={formik.touched.phone && Boolean(formik.errors.phone)}
+            helperText={formik.touched.phone && formik.errors.phone}
+            fullWidth
+          />
+        </Grid>
         <Grid item md={3} sm={6} xs={12}>
           <Controls.Input
             label="Square Feet"
