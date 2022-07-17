@@ -155,6 +155,7 @@ const ToLetForm = (props) => {
             label="Phone"
             name="phone"
             value={formik.values.phone}
+            type="number"
             onChange={formik.handleChange}
             error={formik.touched.phone && Boolean(formik.errors.phone)}
             helperText={formik.touched.phone && formik.errors.phone}

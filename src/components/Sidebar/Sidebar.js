@@ -25,7 +25,7 @@ import {
   toggleSidebar,
 } from "../../context/LayoutContext";
 
-const structure = [
+const structure_admin = [
   { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <DashboardIcon color='secondary'/> },
   {
     id: 1,
@@ -41,15 +41,62 @@ const structure = [
   },
   {
     id: 3,
-    label: "Check in out",
-    link: "/app/check/in/out",
-    icon: <CompareArrowsIcon style={{color: 'purple'}}/>,
+    label: "Check In",
+    link: "/app/check/in",
+    icon: <CompareArrowsIcon style={{color: 'green'}}/>,
+  },
+  {
+    id: 4,
+    label: "Check Out",
+    link: "/app/check/out",
+    icon: <CompareArrowsIcon style={{color: 'red'}}/>,
+  },
+];
+
+const structure_renter = [
+  {
+    id: 0,
+    label: "Profile",
+    link: "/app/profile",
+    icon: <PersonIcon color='primary' />,
+  },
+  {
+    id: 1,
+    label: "To Let",
+    link: "/app/to/let",
+    icon: <ApartmentIcon/>,
+  },
+];
+
+const structure_owner = [
+  {
+    id: 0,
+    label: "Profile",
+    link: "/app/profile",
+    icon: <PersonIcon color='primary' />,
+  },
+  {
+    id: 1,
+    label: "To Let",
+    link: "/app/to/let",
+    icon: <ApartmentIcon/>,
   },
 ];
 
 function Sidebar({ location }) {
   var classes = useStyles();
   var theme = useTheme();
+
+  let structure;
+
+  const user_type = localStorage.getItem("user_type");
+  if(user_type === "Admin"){
+    structure = structure_admin
+  }else if(user_type === "Renter"){
+    structure = structure_renter
+  }else if(user_type === "Owner"){
+    structure = structure_owner
+  }
 
   // global
   var { isSidebarOpened } = useLayoutState();

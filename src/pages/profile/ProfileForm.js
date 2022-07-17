@@ -95,13 +95,13 @@ const ProfileForm = (props) => {
 
   useEffect(() => {
     async function getReligions() {
-      const response = await fetch("/api/married/status/list");
+      const response = await fetch("/api/religion/list");
       const body = await response.json();
       setReligions(body);
     }
     getReligions();
     async function getMarriedStatuses() {
-      const response = await fetch("/api/religion/list");
+      const response = await fetch("/api/married/list");
       const body = await response.json();
       setMarriedStatuses(body);
     }

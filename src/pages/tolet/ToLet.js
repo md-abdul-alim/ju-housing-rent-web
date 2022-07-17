@@ -14,7 +14,8 @@ import { makeStyles } from "@material-ui/core";
 import ToLetDetail from "./ToLetDetail";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { ToLetForm } from "./ToLetForm";
-import { CheckInForm } from "./CheckInForm";
+import { CheckInForm } from "../CheckInOut/CheckInForm";
+import { CheckOutForm } from "../CheckInOut/CheckOutForm";
 
 import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
 import Grid from "@material-ui/core/Grid";
@@ -50,6 +51,7 @@ export default function ToLet() {
   const [openPopup, setOpenPopup] = useState(false);
   const [openPopup1, setOpenPopup1] = useState(false);
   const [openPopup2, setOpenPopup2] = useState(false);
+  const [openPopup3, setOpenPopup3] = useState(false);
 
 
   const AxiosHeader = {
@@ -187,7 +189,21 @@ export default function ToLet() {
 
     try {
       await axios
-        .post("/api/check/in/create/", values, AxiosHeader)
+        .post("/api/check/in/", values, AxiosHeader)
+        .then((resp) => {
+          setToLetRecord(resp.data);
+          setSubmitting(false);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postCheckOut = async (values, setSubmitting) => {
+
+    try {
+      await axios
+        .post("/api/check/out/", values, AxiosHeader)
         .then((resp) => {
           setToLetRecord(resp.data);
           setSubmitting(false);
@@ -491,7 +507,7 @@ export default function ToLet() {
                 <Tooltip title={"Accept"} placement="bottom" arrow>
                   <IconButton
                       onClick={() => {
-                        if(to_let['check_out_status'] === 'True'){
+                        if(to_let['check_out_status'] === 'True' || (to_let['check_in_renter_name'] === 'None' && to_let['check_in_status'] === 'True')){
                           acceptCheckIn(item);
                         }else{
                           alert("Be sure your current renter checked out.")
@@ -771,6 +787,17 @@ export default function ToLet() {
     });
   };
 
+  const addOrEditCheckOut = (toLet, resetForm, setSubmitting) => {
+    if (toLet.id === 0) postCheckOut(toLet, setSubmitting);
+    resetForm();
+    setOpenPopup3(false);
+    setNotify({
+      isOpen: true,
+      message: "Submitted Successfully",
+      type: "success",
+    });
+  };
+
   const options = {
     filterType: "dropdown",
     selectableRows: "none",
@@ -787,6 +814,18 @@ export default function ToLet() {
             }}
           >
             <AddIcon />
+          </IconButton>
+        </Tooltip> : ''
+        }
+        {
+          user_type === 'Renter' ? <Tooltip title={"Check Out"}>
+          <IconButton className={classes.iconButtonColor}
+            onClick={() => {
+              setOpenPopup3(true);
+            }}
+            style={{color: 'red', backgroundColor: 'black'}}
+          >
+            Check Out
           </IconButton>
         </Tooltip> : ''
         }
@@ -821,6 +860,13 @@ export default function ToLet() {
         setOpenPopup={setOpenPopup2}
       >
         <CheckInForm recordForEdit={recordForEdit} addOrEditCheckIn={addOrEditCheckIn} />
+      </Popup>
+      <Popup
+        title="Check Out Form"
+        openPopup={openPopup3}
+        setOpenPopup={setOpenPopup3}
+      >
+        <CheckOutForm addOrEditCheckOut={addOrEditCheckOut} />
       </Popup>
       <Popup
         title="To Let Detail"

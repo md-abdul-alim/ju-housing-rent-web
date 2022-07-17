@@ -26,18 +26,16 @@ const style = makeStyles({
 
 var initialValues = {
   id: 0,
-  to_let_from: '',
-  remark: '',
-  code: '',
+  check_out_date: new Date(),
 };
 
 
-const CheckInForm = (props) => {
+const CheckOutForm = (props) => {
 
-  const { addOrEditCheckIn, recordForEdit } = props;
+  const { addOrEditCheckOut } = props;
 
   const validationSchema = yup.object().shape({
-    to_let_from: yup.string().required("Date is required"),
+    check_out_date: yup.string().required("Date is required"),
   });
 
   const classes = style();
@@ -47,19 +45,11 @@ const CheckInForm = (props) => {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
-      console.log(values)
         setSubmitting(true);
-        addOrEditCheckIn(values, resetForm, setSubmitting);
+        addOrEditCheckOut(values, resetForm, setSubmitting);
     },
   });
 
-
-  useEffect(() => {
-    if (recordForEdit != null){
-      formik.setFieldValue("to_let_from", recordForEdit["to_let_from"]);
-      formik.setFieldValue("code", recordForEdit["code"]);
-    }
-  }, [recordForEdit]);
 
 
   return (
@@ -67,34 +57,18 @@ const CheckInForm = (props) => {
       <Form onSubmit={formik.handleSubmit}>
           <Grid item md={12} sm={12} xs={12}>
             <Controls.DatePicker
-              label="Check in date"
-              name="to_let_from"
-              value={formik.values.to_let_from}
-              minDate={recordForEdit !== null ? recordForEdit['to_let_from'] : new Date()}
+              label="Check out date"
+              name="check_out_date"
+              value={formik.values.check_out_date}
+              minDate={new Date()}
               maxDate={new Date().setDate(new Date().getDate() + 60)}
-              placeholder="Check in date"
               onChange={value => {
-                formik.setFieldValue("to_let_from", value)
+                formik.setFieldValue("check_out_date", value)
               }}
               onBlur={formik.handleBlur}
               fullWidth
             />
           </Grid>
-          <Grid item md={12} sm={12} xs={12}>
-            <Controls.Input
-              label="Remark"
-              name="remark"
-              id="remark"
-              value={formik.values.remark}
-              onChange={formik.handleChange}
-              error={formik.touched.remark && Boolean(formik.errors.remark)}
-              helperText={formik.touched.remark && formik.errors.remark}
-              multiline
-              rows={2}
-              fullWidth
-            />
-          </Grid>
-          {recordForEdit !== null ? parseInt(recordForEdit["check_in_permission_nid"]) === parseInt(localStorage.getItem("nid")) ?
           <Grid item md={12} sm={12} xs={12} alignItems="center">
             <div className={classes.wrapper}>
               <Controls.Button
@@ -103,12 +77,12 @@ const CheckInForm = (props) => {
                 text="Submit"
               />
             </div>
-          </Grid> : <p style={{color: 'red'}}>You have no check in permission. Please contact with the owner.</p> : ''}
+          </Grid>
       </Form>
     </>
   );
 };
 
 export {
-  CheckInForm,
+  CheckOutForm,
 }

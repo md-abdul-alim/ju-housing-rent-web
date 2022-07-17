@@ -105,7 +105,7 @@ function ProfileDetail(props) {
                   </TableRow>
                   <TableRow>
                     <TableCell>Birthday:</TableCell>
-                    <TableCell align="right">{userData.birthday}</TableCell>
+                    <TableCell align="right">{userData.birthday_date}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>NID:</TableCell>
@@ -114,6 +114,10 @@ function ProfileDetail(props) {
                   <TableRow>
                     <TableCell>Passport:</TableCell>
                     <TableCell align="right">{userData.passport}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Married Status:</TableCell>
+                    <TableCell align="right">{userData.married_status_name}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Occupation:</TableCell>
@@ -130,6 +134,10 @@ function ProfileDetail(props) {
                       <TableCell align="right">{userData.occupation_institution}</TableCell>
                     </TableRow>
                     <TableRow>
+                      <TableCell>Religion:</TableCell>
+                      <TableCell align="right">{userData.religion_name}</TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableCell>Education Qualification:</TableCell>
                       <TableCell align="right">{userData.education_qualification}</TableCell>
                     </TableRow>
@@ -141,14 +149,14 @@ function ProfileDetail(props) {
                       <TableCell>Permanent Address:</TableCell>
                       <TableCell align="right">{userData.permanent_address}</TableCell>
                     </TableRow>
-                    <TableRow>
+                    {/* <TableRow>
                       <TableCell>Previous House Owner:</TableCell>
-                      <TableCell align="right">{profileData.previous_house_owner}</TableCell>
+                      <TableCell align="right">{profileData.previous_house_owner_name}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell>Present House Owner:</TableCell>
-                      <TableCell align="right">{profileData.present_house_owner}</TableCell>
-                    </TableRow>
+                      <TableCell align="right">{profileData.present_house_owner_name}</TableCell>
+                    </TableRow> */}
                     <TableRow>
                       <TableCell>Rent Of Date:</TableCell>
                       <TableCell align="right">{profileData.rent_of_date}</TableCell>
