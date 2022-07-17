@@ -155,7 +155,12 @@ function Login(props) {
           setError(null)
           dispatch({ type: 'LOGIN_SUCCESS', payload: res.data })
           setIsLoading(false);
-          props.history.push('/app/dashboard')
+          if (localStorage.getItem("user_type") === 'Admin'){
+            props.history.push('/app/dashboard')
+          }else{
+            props.history.push('/app/profile')
+          }
+          
         }, 1000);
       })
       .catch((err) => {
