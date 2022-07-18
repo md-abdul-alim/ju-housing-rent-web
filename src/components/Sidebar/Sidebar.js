@@ -29,24 +29,18 @@ const structure_admin = [
   { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <DashboardIcon color='secondary'/> },
   {
     id: 1,
-    label: "Profile",
-    link: "/app/profile",
-    icon: <PersonIcon color='primary' />,
-  },
-  {
-    id: 2,
     label: "To Let",
     link: "/app/to/let",
     icon: <ApartmentIcon/>,
   },
   {
-    id: 3,
+    id: 2,
     label: "Check In",
     link: "/app/check/in",
     icon: <CompareArrowsIcon style={{color: 'green'}}/>,
   },
   {
-    id: 4,
+    id: 3,
     label: "Check Out",
     link: "/app/check/out",
     icon: <CompareArrowsIcon style={{color: 'red'}}/>,
