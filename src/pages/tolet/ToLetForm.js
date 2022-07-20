@@ -37,25 +37,29 @@ var initialValues = {
   description: "s",
 };
 
-const verifyNid = (renterNid, value)=> {
-  if(renterNid.length === 0){
-    return false;
-  }else{
-    for (let i=0; i< renterNid.length; i ++){
-      if(parseInt(renterNid[i].nid) === parseInt(value)){
-        return true;
-      }
-    }
-    return false;
-  }
-};
-
-
 
 const ToLetForm = (props) => {
 
   const { addOrEdit, recordForEdit } = props;
   const [renterNid, setRenterNid] = useState([]);
+  const [previewImage1, setPreviewImage1] = useState()
+  const [previewImage2, setPreviewImage2] = useState()
+
+
+  const verifyNid = (renterNid, value)=> {
+    if(renterNid.length === 0){
+      return false;
+    }else{
+      for (let i=0; i< renterNid.length; i ++){
+        if(parseInt(renterNid[i].nid) === parseInt(value)){
+          setPreviewImage1(renterNid[i].nid_font_image)
+          setPreviewImage2(renterNid[i].nid_back_image)
+          return true;
+        }
+      }
+      return false;
+    }
+  };
 
 
   const validationSchema = yup.object().shape({
@@ -232,6 +236,26 @@ const ToLetForm = (props) => {
             rows={2}
             fullWidth
           />
+        </Grid>
+        <Grid item md={6}>
+            <Grid container alignItems="center" spacing={6}>
+                <Grid align='center' item md={12} sm={12} xs={12} >
+                    {previewImage1 && (
+                    <div>
+                        <img className="preview my20" src={previewImage1} alt="Style Image"  height="60%" width="60%" />                                                        </div>
+                    )}
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid item md={6}>
+            <Grid container alignItems="center" spacing={6}>
+                <Grid align='center' item md={12} sm={12} xs={12} >
+                    {previewImage2 && (
+                    <div>
+                        <img className="preview my20" src={previewImage2} alt="Style Image"  height="60%" width="60%" />                                                        </div>
+                    )}
+                </Grid>
+            </Grid>
         </Grid>
         <Grid item style={{ marginTop: 16 }}>
           <div className={classes.wrapper}>
